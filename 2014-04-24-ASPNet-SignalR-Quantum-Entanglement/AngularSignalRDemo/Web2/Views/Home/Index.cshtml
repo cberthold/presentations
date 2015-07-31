@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>ASP.NET SignalR Demo</h1>
+    <p class="lead">Don't hate the demo.. hate the guy sleeping through it.</p>
+    
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Actions</div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <span class="input-group-addon">@@</span>
+                    <input id="username" data-bind="value: myName" type="text" class="form-control" placeholder="Username">
+                </div>
+                <button class="btn btn-default" data-bind="click: sendToMe">Send to Me</button><br />
+                <button class="btn btn-default" data-bind="click: sendToEveryone">Send to Everyone</button><br />
+                <button class="btn btn-default" data-bind="click: joinExcitingGroup">Join Exciting Group</button><br />
+                <button class="btn btn-default" data-bind="click: sendToExcitingGroup">Send To Exciting Group</button><br />
+
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">Results</div>
+            <div class="panel-body">
+                <ul id="results" data-bind="foreach: resultArray">
+                    <li><span data-bind="text: data"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+@section scripts {
+<script type="text/javascript">
+    var web2ViewModel = function () {
+
+        var resultArray = ko.observableArray([]);
+        var myName = ko.observable('my name');
+
+        var createInputObject = function () {
+            var item = {};
+            item.From = myName();
+
+            return item;
+        };
+
+        var sendToMe = function () {
+            var input = createInputObject();
+            alert('send to me');
+        };
+
+        var sendToEveryone = function () {
+            var input = createInputObject();
+            alert('send to everyone');
+        };
+
+        var sendToExcitingGroup = function () {
+            var input = createInputObject();
+            alert('send to exciting group');
+        };
+
+        var joinExcitingGroup = function () {
+            var input = createInputObject();
+            alert('joining exciting group');
+        };
+
+        var addResult = function (output) {
+            var str = 'From: ' + output.From + ' Data: ' + output.Data;
+            var item = {};
+            item.data = str;
+            resultArray.push(item);
+        };
+
+        return {
+            addResult: addResult,
+            sendToMe: sendToMe,
+            sendToEveryone: sendToEveryone,
+            sendToExcitingGroup: sendToExcitingGroup,
+            joinExcitingGroup: joinExcitingGroup,
+
+            myName: myName,
+            resultArray: resultArray
+        };
+    };
+    // create view model
+    var vm = new web2ViewModel();
+    // apply ko bindings
+    ko.applyBindings(vm);
+
+    $(document).ready(function () {
+        
+    });
+    
+</script>
+}

@@ -1,0 +1,36 @@
+﻿@{
+    PageData["title"] = "AngularJS SPA Template for Visual Studio";
+} 
+<div class="panel panel-default" ng-controller="SalesController">
+    <div class="panel-heading">
+        US Sales
+        
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default" ng-click="addSale()">Add Random Sale</button>
+            <button type="button" class="btn btn-default" ng-click="toggleAutoSales()">Toggle Auto Sales</button>
+            <button type="button" class="btn btn-default" ng-click="refreshSales()">Refresh Sales</button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-9" d3map style="position:relative; height:100%; min-height:400px;"></div>
+            <div class="col-lg-3">
+                <div class="panel panel-primary" id="volume-fees-summary-panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Sales Reps
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li style="color:aqua">Alice</li>
+                            <li style="color:brown">Bob</li>
+                            <li style="color:green">Milton</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
