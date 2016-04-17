@@ -1,0 +1,119 @@
+'use strict';
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
+
+var bodyParser = require('body-parser');
+var express = require('express');
+
+var configJs = require('./config.js');
+var domain = require('./domain.js');
+var commandHandlers = require('./command-handlers.js');
+var commandRegistry = require('./command-registry.js');
+
+var todomvc = require('todomvc');
+var todomvcApi = require('todomvc-api');
+
+var config = configJs.config();
+console.log('loading mongo');
+require('sourced-repo-mongo/mongo').connect(config.MONGO_URL);
+console.log('done loading');
+
+var api = module.exports.api = express();
+api.use(bodyParser.json());
+
+api.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+var app = module.exports.app = express();
+app.use('/api', [todomvcApi.server, api]);
+
+app.get('/', function(req, res) {
+  res.redirect('/examples/angularjs');
+});
+app.use(todomvc);
+
+app.get('/_ah/health', function(req, res) {
+  res.status(200)
+    .set('Content-Type', 'text/plain')
+    .send('ok');
+});
+
+var handleResponse = function(promise, res, successStatus) {
+
+  promise.then(function(payload) {
+  
+    if(successStatus) {
+      res.status(successStatus);
+    }
+  
+    res.json(payload);
+  
+  }).catch(function(err) {
+    console.error(err);
+    res.status(err.code).send(err.message);
+  });
+
+};
+
+var executeCommand = function(command, res, successStatus) {
+  var returnValue = async (function() {
+     var result = await (command.execute());
+     
+     return result;
+  }); 
+  
+  handleResponse(returnValue(), res);  
+};
+
+// API Routes
+api.get('/', function(req, res) {
+  res.status(200)
+    .set('Content-Type', 'text/plain')
+    .send('ok');
+});
+
+api.get('/todos', function(req, res) {
+  var command = commandRegistry.build('getAll', null);
+  executeCommand(command, res);
+});
+
+api.get('/todos/:id', function(req, res) {
+  var id = req.param('id');
+  var command = commandRegistry.build('getItemById', id);
+  executeCommand(command, res);  
+});
+
+
+api.put('/todos/:id', function(req, res) {
+  var id = req.param('id');
+  var todo = req.body;
+  todo.itemId = id;
+  var command = commandRegistry.build('renameItem', todo);
+  executeCommand(command, res);
+});
+
+api.post('/todos', function(req, res) {
+  var todo = req.body;
+  var command = commandRegistry.build('addItem', todo);
+  executeCommand(command, res, 201);
+});
+
+
+api.delete('/todos', function(req, res) {
+  var command = commandRegistry.build('removeAll', itemToRemove);
+  executeCommand(command, res, 204);
+});
+
+api.delete('/todos/:id', function(req, res) {
+  var id = req.param('id');
+  var itemToRemove = { itemId: id };
+  var command = commandRegistry.build('removeItem', itemToRemove);
+  executeCommand(command, res, 204);
+});
+
+
+
+app.listen(process.env.PORT || 8080);
