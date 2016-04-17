@@ -1,0 +1,17 @@
+{
+  "name": "es-todo",
+  "version": "1.0.0",
+  "dependencies": {
+    "todomvc-api": {
+      "version": "0.2.0",
+      "from": "todomvc-api@>=0.2.0",
+      "dependencies": {
+        "dredd": {
+          "version": "~1.0.10",
+          "from": "dredd@>=0.3.9"
+        }
+      }
+    }
+
+  }
+}

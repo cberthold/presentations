@@ -4,9 +4,24 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "sourced": "^0.1.1"
+    "asyncawait": "^1.0.3",
+    "bluebird": "^3.3.5",
+    "body-parser": "^1.15.0",
+    "events": "^1.1.0",
+    "express": "^4.13.4",
+    "fibers": "^1.0.10",
+    "lodash": "^4.11.1",
+    "node-uuid": "^1.4.7",
+    "sourced": "^0.1.1",
+    "sourced-repo-mongo": "^0.3.9",
+    "todomvc": "^0.1.1",
+    "todomvc-api": "^0.2.0",
+    "utils": "^0.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.9.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
