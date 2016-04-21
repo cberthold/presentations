@@ -16,7 +16,9 @@ var TodoList = domain.TodoList;
 var tenantId = '4558ba3f-ad7b-4292-9018-c1a0111fdcb3';
 
 var getRepository = function() {
-  var repository = new Repository(TodoList);
+  
+  var options = { snapshotFrequency: 99999999 };
+  var repository = new Repository(TodoList, options);
   var asyncRepository = Promise.promisifyAll(repository);
   return asyncRepository;
 };

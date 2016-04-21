@@ -43,3 +43,8 @@ cd ../..
 # create "todos" database in robomongo
 # node index.js
 # run url http://www.todobackend.com/client/index.html?http://localhost:3000
+
+# cd ..
+# mkdir es-todo
+# cd es-todo
+# 

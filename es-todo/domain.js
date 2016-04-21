@@ -19,9 +19,17 @@ function TodoList() {
 util.inherits(TodoList, Entity);
 
 TodoList.prototype.findItemById = function(itemId) {
-  var item = _.find(this.todos, function(item) {
-    return item.id === itemId;
-  });
+  var item = null;
+  
+  for(var i=0; i < this.todos.length; i++)
+  {
+    
+    if(this.todos[i].id === itemId) 
+    {
+      item = this.todos[i];
+      break;
+    }
+  }
   
   return item;
 };
@@ -46,9 +54,15 @@ TodoList.prototype.addItem = function(param) {
 
 TodoList.prototype.removeItem = function(param) {
   var itemId = param.itemId;
-  _.remove(this.todos, function(item) {
-    return item.id === itemId;
-  });
+  for(var i=0; i < this.todos.length; i++)
+  {
+    var item = this.todos[i];
+    if(item.id === itemId) 
+    {
+      this.todos.splice(i, 1);
+      break;
+    }
+  }
   this.digest('removeItem', param);
   this.emit('todoItemRemoved', param, this);
 };
@@ -69,10 +83,19 @@ TodoList.prototype.renameItem = function(param) {
   this.emit('todoItemRenamed', param, this);
 };
 
-TodoList.prototype.removeAll = function(param) {
+TodoList.prototype.deleteAll = function(param) {
   param = null;
-  this.todos = [];
-  this.digest('removeAll', param);
+  
+  var tmpTodos = [];
+  for(var i = 0; i < this.todos.length; i++)
+  {
+    var item = this.todos[i];
+    if(!item.completed) tmpTodos.push(item);
+  }
+  
+  this.todos = tmpTodos;
+  
+  this.digest('deleteAll', param);
   this.emit('allTodoItemsRemoved', param, this);
 };
 
