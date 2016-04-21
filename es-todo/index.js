@@ -4,7 +4,7 @@ var await = require('asyncawait/await');
 
 var bodyParser = require('body-parser');
 var express = require('express');
-
+var http = require('http');
 var configJs = require('./config.js');
 var domain = require('./domain.js');
 var commandHandlers = require('./command-handlers.js');
@@ -12,6 +12,10 @@ var commandRegistry = require('./command-registry.js');
 
 var todomvc = require('todomvc');
 var todomvcApi = require('todomvc-api');
+var io = require('socket.io');
+
+var amqpClient = require('amqp10').Client;
+var Promise = require('bluebird');
 
 var config = configJs.config();
 console.log('loading mongo');
@@ -28,6 +32,7 @@ api.use(function(req, res, next) {
 });
 
 var app = module.exports.app = express();
+app.use(express.static(__dirname + '/static'));
 app.use('/api', [todomvcApi.server, api]);
 
 app.get('/', function(req, res) {
@@ -103,7 +108,7 @@ api.post('/todos', function(req, res) {
 
 
 api.delete('/todos', function(req, res) {
-  var command = commandRegistry.build('removeAll', itemToRemove);
+  var command = commandRegistry.build('removeAll', null);
   executeCommand(command, res, 204);
 });
 
@@ -114,6 +119,60 @@ api.delete('/todos/:id', function(req, res) {
   executeCommand(command, res, 204);
 });
 
+var serverPort = process.env.PORT || 8080;
 
+var server = http.createServer(app).listen(serverPort, function() {
+  console.log("Express server listening on port " + serverPort);
+});
 
-app.listen(process.env.PORT || 8080);
+var sio = io.listen(server);
+
+var address_list = new Array();
+
+// wire up socket.io
+sio.sockets.on('connection', function(socket) {
+  var address = socket.handshake.address;
+  
+  if(address_list[address]) {
+    var socketid = address_list[address].list;
+    socketid.push(socket.id);
+    address_list[address].list = socketid;
+  } else {
+    var socketid = new Array();
+    socketid.push(socket.id);
+    address_list[address] = new Array();
+    address_list[address].list = socketid;
+  }
+  
+  // disconnected state
+  socket.on('disconnect', function() {
+    var socketid = address_list[address].list;
+    delete socketid[socketid.indexOf(socket.id)];
+    if(Object.keys(socketid).length == 0) {
+      delete address_list[address];
+    }
+  });
+  
+});
+
+var client = new amqpClient();
+client.connect('amqp://localhost')
+  .then(function() {
+    return Promise.all([
+      client.createReceiver('amq.topic'),
+      client.createSender('amq.topic')
+    ]);
+  })
+  .spread(function(receiver, sender) {
+    receiver.on('errorReceived', function(err) {
+      console.log("error: ", err);
+    });
+    receiver.on('message', function(message) {
+      console.log('Rx message: ', message.body);
+    });
+    
+    return sender.send({ key: "value" });
+  })
+  .error(function(err) {
+    console.log("error: ", err);
+  });
