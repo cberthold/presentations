@@ -240,10 +240,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Todo.BoundedContext\Todo.BoundedContext.csproj">
-      <Project>{0eeb8dcc-98cc-4cc2-8c1b-89ce6c16ecc6}</Project>
-      <Name>Todo.BoundedContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{02764761-a6be-4087-8dd9-34676522062f}</Project>
       <Name>Infrastructure</Name>
@@ -251,6 +247,10 @@
     <ProjectReference Include="..\Todo.BoundedContext.Events\Todo.BoundedContext.Events.csproj">
       <Project>{97d23231-d36b-4c4b-b033-76ab9a3dcfa7}</Project>
       <Name>Todo.BoundedContext.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Todo.BoundedContext\Todo.BoundedContext.csproj">
+      <Project>{0eeb8dcc-98cc-4cc2-8c1b-89ce6c16ecc6}</Project>
+      <Name>Todo.BoundedContext</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
