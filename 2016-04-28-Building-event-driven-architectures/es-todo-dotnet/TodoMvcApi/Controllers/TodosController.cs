@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace TodoMvcApi.Controllers
 {
-    public class ValuesController : ApiController
+    public class TodosController : ApiController
     {
         // GET api/values
         public IEnumerable<string> Get()
