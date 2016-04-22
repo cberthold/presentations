@@ -17,3 +17,6 @@ Version.cs
 Version.h
 Version.cpp
 *.userprefs
+hapi-todo/
+.#install.sh
+node_modules/
