@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.BoundedContext.Data", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.BoundedContext.Projections", "Todo.BoundedContext.Projections\Todo.BoundedContext.Projections.csproj", "{8941D058-B76B-4E42-8B03-9D4EA725B5C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoMvc.SignalR", "TodoMvc.SignalR\TodoMvc.SignalR.csproj", "{E9AC77FA-3D9A-4F2E-95A6-79F39616030F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{8941D058-B76B-4E42-8B03-9D4EA725B5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8941D058-B76B-4E42-8B03-9D4EA725B5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8941D058-B76B-4E42-8B03-9D4EA725B5C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9AC77FA-3D9A-4F2E-95A6-79F39616030F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9AC77FA-3D9A-4F2E-95A6-79F39616030F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9AC77FA-3D9A-4F2E-95A6-79F39616030F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9AC77FA-3D9A-4F2E-95A6-79F39616030F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

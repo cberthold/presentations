@@ -8,6 +8,40 @@
  * model.
  */
 angular.module('todomvc')
+    .factory('backendHubProxy', ['$rootScope', 'backendServerUrl', 
+        function($rootScope, backendServerUrl)
+        {
+            function backendFactory(serverUrl, hubName) {
+                var connection = $.hubConnection(backendServerUrl);
+                var proxy = connection.createHubProxy(hubName);
+
+                connection.start().done(function () { });
+
+                return {
+                    on: function (eventName, callback) {
+                        proxy.on(eventName, function (result) {
+                            $rootScope.$apply(function () {
+                                if (callback) {
+                                    callback(result);
+                                }
+                            });
+                        });
+                    },
+                    invoke: function (methodName, callback) {
+                        proxy.invoke(methodName)
+                        .done(function (result) {
+                            $rootScope.$apply(function () {
+                                if (callback) {
+                                    callback(result);
+                                }
+                            });
+                        });
+                    }
+                };
+            };
+
+            return backendFactory;
+        }])
 	.factory('todoStorage', function ($http, $injector) {
 		'use strict';
 
@@ -21,13 +55,14 @@ angular.module('todomvc')
 			});
 	})
 
-	.factory('api', function ($http) {
+	.factory('api', function ($http, backendHubProxy) {
 		'use strict';
 
 		var store = {
 			todos: [],
 
 			clearCompleted: function () {
+                /*
 				var originalTodos = store.todos.slice(0);
 
 				var completeTodos = [], incompleteTodos = [];
@@ -40,7 +75,7 @@ angular.module('todomvc')
 				});
 
 				angular.copy(incompleteTodos, store.todos);
-
+                */
 				return $http.delete('/api/todos')
 					.then(function success() {
 						return store.todos;
@@ -51,10 +86,11 @@ angular.module('todomvc')
 			},
 
 			delete: function (todo) {
+                /*
 				var originalTodos = store.todos.slice(0);
 
 				store.todos.splice(store.todos.indexOf(todo), 1);
-
+                */
 				return $http.delete('/api/todos/' + todo.id)
 					.then(function success() {
 						return store.todos;
@@ -73,12 +109,15 @@ angular.module('todomvc')
 			},
 
 			insert: function (todo) {
+                
 				var originalTodos = store.todos.slice(0);
 
 				return $http.post('/api/todos', todo)
 					.then(function success(resp) {
-						todo.id = resp.data.id;
+					    todo.id = resp.data.id;
+                        /*
 						store.todos.push(todo);
+                        */
 						return store.todos;
 					}, function error() {
 						angular.copy(originalTodos, store.todos);
@@ -98,6 +137,14 @@ angular.module('todomvc')
 					});
 			}
 		};
+
+		var todoMvcHub = backendHubProxy(backendHubProxy.defaultServer, 'todoMvcHub');
+		console.log('connected to service')
+
+		todoMvcHub.on('receieveTodos', function (data) {
+		    angular.copy(data.todos, store.todos);
+		});
+
 
 		return store;
 	})

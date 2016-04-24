@@ -18,8 +18,8 @@ namespace Todo.BoundedContext.Projections
         IEventHandler<CompletedTodoItemsRemoved>
     {
 
-        IReadRepository<TodoListDTO> repository;
-
+        readonly IReadRepository<TodoListDTO> repository;
+        
         public TodoListDTOHandlers(IReadRepository<TodoListDTO> repository)
         {
             this.repository = repository;
@@ -32,6 +32,8 @@ namespace Todo.BoundedContext.Projections
                               where i.ItemId != message.ItemId
                               select i).ToList();
             repository.Update(todoList);
+
+            MessageSender.Publish(todoList);
         }
 
         public void Handle(CompletedTodoItemsRemoved message)
@@ -41,6 +43,7 @@ namespace Todo.BoundedContext.Projections
                               where !i.Completed
                               select i).ToList();
             repository.Update(todoList);
+            MessageSender.Publish(todoList);
         }
 
         public void Handle(TodoItemUpdated message)
@@ -50,6 +53,7 @@ namespace Todo.BoundedContext.Projections
             item.Title = message.Title;
             item.Completed = message.Completed;
             repository.Update(todoList);
+            MessageSender.Publish(todoList);
         }
 
         public void Handle(TodoItemAdded message)
@@ -63,6 +67,7 @@ namespace Todo.BoundedContext.Projections
                 Title = message.Title,
             });
             repository.Update(todoList);
+            MessageSender.Publish(todoList);
         }
 
         public void Handle(TodoListStarted message)
@@ -70,6 +75,7 @@ namespace Todo.BoundedContext.Projections
             var todoList = new TodoListDTO();
             todoList.Id = message.Id;
             repository.Insert(todoList);
+            MessageSender.Publish(todoList);
         }
     }
 }

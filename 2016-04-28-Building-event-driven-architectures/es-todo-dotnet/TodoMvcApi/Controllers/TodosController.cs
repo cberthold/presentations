@@ -37,7 +37,8 @@ namespace TodoMvcApi.Controllers
         [Route("api/Todos")]
         public List<TodoItemDTO> Get()
         {
-            return readModel.Get(TenantId).Todos;
+            var todos = readModel.Get(TenantId)?.Todos;
+            return todos ?? new List<TodoItemDTO>();
         }
 
         [HttpGet]
