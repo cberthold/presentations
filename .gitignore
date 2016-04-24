@@ -20,3 +20,4 @@ Version.cpp
 hapi-todo/
 .#install.sh
 node_modules/
+.vs

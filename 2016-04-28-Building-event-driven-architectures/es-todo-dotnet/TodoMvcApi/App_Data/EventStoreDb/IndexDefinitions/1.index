@@ -1,0 +1,33 @@
+{
+  "IndexId": 1,
+  "Name": "Auto/DocumentDatas/ByAggregateIdAndVersionAndVersion_RangeSortByAggregateIdVersion",
+  "LockMode": "Unlock",
+  "Map": "from doc in docs.DocumentDatas\nselect new {\n\tVersion = doc.Version,\n\tAggregateId = doc.AggregateId\n}",
+  "Maps": [
+    "from doc in docs.DocumentDatas\nselect new {\n\tVersion = doc.Version,\n\tAggregateId = doc.AggregateId\n}"
+  ],
+  "Reduce": null,
+  "IsMapReduce": false,
+  "IsCompiled": false,
+  "Stores": {},
+  "Indexes": {},
+  "SortOptions": {
+    "AggregateId": "String",
+    "Version": "Int"
+  },
+  "Analyzers": {},
+  "Fields": [],
+  "Suggestions": {},
+  "TermVectors": {},
+  "SpatialIndexes": {},
+  "InternalFieldsMapping": {
+    "Version_Range": "Version_Range",
+    "AggregateId": "AggregateId",
+    "Version": "Version"
+  },
+  "MaxIndexOutputsPerDocument": null,
+  "Type": "Auto",
+  "DisableInMemoryIndexing": false,
+  "IsTestIndex": false,
+  "IsSideBySideIndex": false
+}
