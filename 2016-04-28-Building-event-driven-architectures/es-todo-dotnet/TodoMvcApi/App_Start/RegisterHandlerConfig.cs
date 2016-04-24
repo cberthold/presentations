@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Todo.BoundedContext.Handlers;
+using Todo.BoundedContext.Projections;
 
 namespace TodoMvcApi
 {
@@ -19,10 +20,8 @@ namespace TodoMvcApi
 
             // setup todo command handlers
             registrar.Register(typeof(TodoCommandHandlers));
-
-            var handlerRegistrar = DependencyResolver.Current.GetService<IHandlerRegistrar>();
-
-
+            registrar.Register(typeof(TodoListDTOHandlers));
+            
         }
     }
 

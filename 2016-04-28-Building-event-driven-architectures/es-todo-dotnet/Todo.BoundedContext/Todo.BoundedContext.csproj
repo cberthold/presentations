@@ -40,13 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\TodoItemEntity.cs" />
+    <Compile Include="Domain\TodoListAggregate.cs" />
     <Compile Include="Handlers\TodoCommandHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadModel\ITodoListReadModelFacade.cs" />
+    <Compile Include="ReadModel\TodoListReadModelFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{02764761-a6be-4087-8dd9-34676522062f}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Todo.BoundedContext.Commands\Todo.BoundedContext.Commands.csproj">
+      <Project>{BE5238A2-C442-4909-9234-F8777CC60184}</Project>
+      <Name>Todo.BoundedContext.Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Todo.BoundedContext.Data\Todo.BoundedContext.Data.csproj">
+      <Project>{F6C74F0C-9657-452F-BB8F-7497BBB4B9C8}</Project>
+      <Name>Todo.BoundedContext.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Todo.BoundedContext.Events\Todo.BoundedContext.Events.csproj">
       <Project>{97d23231-d36b-4c4b-b033-76ab9a3dcfa7}</Project>
@@ -54,9 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Domain\" />
-    <Folder Include="ReadModel\" />
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

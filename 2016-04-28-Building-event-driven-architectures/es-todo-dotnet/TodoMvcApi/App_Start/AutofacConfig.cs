@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using TodoMvcApi.Modules;
 
 namespace TodoMvcApi
 {
@@ -32,7 +33,7 @@ namespace TodoMvcApi
             // register WebAPI controllers
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterModule<CustomerApiModule>();
+            builder.RegisterModule<TodoMvcModule>();
 
             // build IoC Container
             var container = builder.Build();
@@ -47,46 +48,24 @@ namespace TodoMvcApi
 
             // configure CORS
             ConfigureCors(app);
-            
+
+
+            // OWIN WEB API SETUP:
+
             // get WebAPI configurations
             var config = new HttpConfiguration();
 
             // set WebAPI dependency resolver
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-
+            
             // register WebAPI routes
             WebApiConfig.Register(config);
-
-            // OWIN WEB API SETUP:
 
             // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
             // and finally the standard Web API middleware.
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
-
-            //app.Map("/api",
-            //    inner =>
-            //    {
-
-            //        // get WebAPI configurations
-            //        var config = new HttpConfiguration();
-
-            //        // set WebAPI dependency resolver
-            //        config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-
-            //        // register WebAPI routes
-            //        WebApiConfig.Register(config);
-
-            //        // OWIN WEB API SETUP:
-
-            //        // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
-            //        // and finally the standard Web API middleware.
-            //        app.UseAutofacWebApi(config);
-            //        app.UseWebApi(config);
-
-            //    });
-
-
+            
         }
     }
 }
