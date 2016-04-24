@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using FluentValidation;
 using Infrastructure.Bus;
 using Infrastructure.Command;
@@ -9,6 +10,8 @@ using Infrastructure.Repository;
 using Infrastructure.Validation;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using Todo.BoundedContext.Commands;
@@ -38,11 +41,35 @@ namespace TodoMvcApi.Modules
                 .As<IEventPublisher>()
                 .As<IHandlerRegistrar>()
                 .SingleInstance();
-
+            // in memory event store
             //builder.RegisterType<InMemoryEventStore>()
             //    .As<IEventStore>()
             //    .SingleInstance();
-            builder.RegisterType<RavenDbEventStore>()
+
+            // raven db event store
+            //builder.RegisterType<RavenDbEventStore>()
+            //    .As<IEventStore>()
+            //    .InstancePerRequest();
+
+            // sql event store
+            builder.Register((ctx) =>
+            {
+                var connectionString =
+                    ConfigurationManager
+                        .ConnectionStrings["DefaultConnection"]
+                        .ConnectionString;
+
+                return new SqlConnection(connectionString);
+            })
+            .Named<SqlConnection>("EventStore")
+            .InstancePerDependency()
+            .AsSelf();
+
+            builder.RegisterType<SqlEventStore>()
+                .WithProperty(new ResolvedParameter(
+                    (pi, ctx) => { return pi.ParameterType == typeof(SqlConnection); },
+                    (pi, ctx) => { return ctx.ResolveNamed<SqlConnection>("EventStore"); }
+                    ))
                 .As<IEventStore>()
                 .InstancePerRequest();
 

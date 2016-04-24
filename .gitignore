@@ -21,3 +21,4 @@ hapi-todo/
 .#install.sh
 node_modules/
 .vs
+/2016-04-28-Building-event-driven-architectures/es-todo-dotnet/TodoMvcApi/App_Data
