@@ -115,8 +115,8 @@ namespace TodoMvcApi.Modules
                 .AsSelf()
                 .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(MongoReadRepository<>))
-                .As(typeof(IReadRepository<>));
+            //builder.RegisterGeneric(typeof(MongoReadRepository<>))
+            //    .As(typeof(IReadRepository<>));
             builder.RegisterGeneric(typeof(RavenDbReadRepository<>))
                 .As(typeof(IReadRepository<>))
                 .InstancePerRequest();
