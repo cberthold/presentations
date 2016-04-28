@@ -11,6 +11,16 @@ namespace Infrastructure.EventStore
     {
         private readonly Dictionary<Guid, List<IEvent>> _inMemoryDB = new Dictionary<Guid, List<IEvent>>();
 
+        public void Begin()
+        {
+            
+        }
+
+        public void Commit()
+        {
+            
+        }
+
         public IEnumerable<IEvent> Get(Guid aggregateId, int fromVersion)
         {
             List<IEvent> events;

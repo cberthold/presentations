@@ -8,6 +8,8 @@ namespace Infrastructure.Events
 {
     public interface IEventStore
     {
+        void Begin();
+        void Commit();
         void Save(IEvent @event);
         IEnumerable<IEvent> Get(Guid aggregateId, int fromVersion);
     }

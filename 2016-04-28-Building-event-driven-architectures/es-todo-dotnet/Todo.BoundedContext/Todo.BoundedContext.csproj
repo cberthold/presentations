@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Domain\TodoItemEntity.cs" />
     <Compile Include="Domain\TodoListAggregate.cs" />
+    <Compile Include="Handlers\RebuildReadModelCommandHandlers.cs" />
     <Compile Include="Handlers\TodoCommandHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModel\ITodoListReadModelFacade.cs" />

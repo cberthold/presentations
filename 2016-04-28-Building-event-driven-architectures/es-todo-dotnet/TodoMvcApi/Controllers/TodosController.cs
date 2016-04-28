@@ -29,7 +29,8 @@ namespace TodoMvcApi.Controllers
         [Route("api/Todos/Rebuild")]
         public void RebuildReadModel()
         {
-
+            var cmd = new RebuildReadModelCommand();
+            dispatcher.Send(cmd);
         }
 
         [HttpGet]
@@ -37,7 +38,12 @@ namespace TodoMvcApi.Controllers
         [Route("api/Todos")]
         public List<TodoItemDTO> Get()
         {
-            return readModel.Get(TenantId).Todos;
+            var list = readModel.Get(TenantId);
+            if(list == null)
+            {
+                return new List<TodoItemDTO>();
+            }
+            return list.Todos;
         }
 
         [HttpGet]

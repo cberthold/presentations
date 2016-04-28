@@ -110,6 +110,10 @@ namespace TodoMvcApi.Modules
                 .AsSelf()
                 .InstancePerRequest();
 
+            builder.RegisterType<RebuildReadModelCommandHandlers>()
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(MongoReadRepository<>))
                 .As(typeof(IReadRepository<>));
