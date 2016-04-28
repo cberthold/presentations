@@ -26,6 +26,7 @@ namespace Infrastructure.Domain
 
         public void Save<T>(T aggregate, int? expectedVersion = null) where T : AggregateRoot
         {
+            _eventStore.Begin();
             if (expectedVersion != null && _eventStore.Get(aggregate.Id, expectedVersion.Value).Any())
                 throw new ConcurrencyException(aggregate.Id);
             var i = 0;
@@ -43,6 +44,7 @@ namespace Infrastructure.Domain
                 _eventStore.Save(@event);
                 _publisher.Publish(@event);
             }
+            _eventStore.Commit();
         }
 
         public T Get<T>(Guid aggregateId) where T : AggregateRoot

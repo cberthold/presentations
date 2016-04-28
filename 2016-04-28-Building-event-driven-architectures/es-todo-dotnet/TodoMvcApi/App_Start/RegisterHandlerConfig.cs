@@ -21,7 +21,7 @@ namespace TodoMvcApi
             // setup todo command handlers
             registrar.Register(typeof(TodoCommandHandlers));
             registrar.Register(typeof(TodoListDTOHandlers));
-            
+            //registrar.Register(typeof(RebuildReadModelCommandHandlers));
         }
     }
 

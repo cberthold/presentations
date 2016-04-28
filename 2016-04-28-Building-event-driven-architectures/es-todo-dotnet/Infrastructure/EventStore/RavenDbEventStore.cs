@@ -83,6 +83,14 @@ namespace Infrastructure.EventStore
             }
         }
 
+        public void Begin()
+        {
+        }
+
+        public void Commit()
+        {
+        }
+
         public class DocumentData
         {
             public Guid CommitId { get; set; }

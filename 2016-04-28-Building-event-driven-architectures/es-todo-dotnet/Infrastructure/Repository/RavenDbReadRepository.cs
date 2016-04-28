@@ -29,6 +29,8 @@ namespace Infrastructure.Repository
         {
             session = store.OpenSession();
             asyncSession = store.OpenAsyncSession();
+            session.Advanced.MaxNumberOfRequestsPerSession = int.MaxValue;
+            asyncSession.Advanced.MaxNumberOfRequestsPerSession = int.MaxValue;
         }
 
 
