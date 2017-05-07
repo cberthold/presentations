@@ -8,10 +8,15 @@ export interface Props
 
 export class ChildComponent extends React.Component<Props, void>
 {
+    private renderItem(value)
+    {
+        return (<li>{value}</li>);
+    }
+
     public render()
     {
-        let strings = this.props.strings;
-        let listOfStrings = strings.map((value) => (<li>{value}</li>));
+        const strings = this.props.strings;
+        const listOfStrings = strings.map(this.renderItem);
 
         return (<div><ul>{listOfStrings}</ul></div>);
     }
