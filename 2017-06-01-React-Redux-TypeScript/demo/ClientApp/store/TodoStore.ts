@@ -33,7 +33,7 @@ const createTodoItem = (state: TodoContainerState, action: AddTodoAction) : Todo
         id: nextId,
         subject: action.subject,
     };
-    return Object.assign({}, state, { lastId: nextId, todos: [...state.todos, nextId]});
+    return Object.assign({}, state, { lastId: nextId, todos: [...state.todos, item]});
 }
 
 const removeTodoItem = (state: TodoContainerState, action: DeleteTodoAction) : TodoContainerState => {
