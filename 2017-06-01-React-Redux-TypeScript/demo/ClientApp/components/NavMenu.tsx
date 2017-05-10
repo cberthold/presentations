@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-export class NavMenu extends React.Component<void, void> {
+export class NavMenu extends React.Component<{}, {}> {
     public render() {
         return <div className='main-nav'>
                 <div className='navbar navbar-inverse'>
@@ -35,6 +35,11 @@ export class NavMenu extends React.Component<void, void> {
                         <li>
                             <Link to={ '/demo1' } activeClassName='active'>
                                 <span className='glyphicon glyphicon-camera'></span> Demo 1
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={ '/todo' } activeClassName='active'>
+                                <span className='glyphicon glyphicon-camera'></span> Demo 2
                             </Link>
                         </li>
                     </ul>
