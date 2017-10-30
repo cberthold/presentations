@@ -15,6 +15,9 @@
 2017/06/01 React-Redux-TypeScript [URL](https://github.com/cberthold/presentations/tree/master/2017-06-01-React-Redux-TypeScript)
   * Presentation on the introduction to developing functional uni-directional data applications using Redux and React
   
+ 2017/11/02 Software Architecture: Introduction to Object Oriented Design Patterns [URL](https://github.com/cberthold/presentations/tree/master/2017-11-02-Object-Design-Patterns)
+  * Presentation on the introduction to Software Architecture with Object Oriented Design Patterns
+  
 
   
 
