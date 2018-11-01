@@ -1,0 +1,1 @@
+docker-compose run --rm myapp rails runner 'Joke.create(body: "Knock! Knock! Whos there? Owls say. Owls say who? Yes, they do.")'
