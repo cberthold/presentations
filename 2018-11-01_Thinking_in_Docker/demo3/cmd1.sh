@@ -1,1 +1,2 @@
-docker-compose run --rm myapp rails runner 'Joke.create(body: "Knock! Knock! Whos there? Owls say. Owls say who? Yes, they do.")'
+#!/bin/sh
+docker-compose exec myapp rails generate scaffold User name:string email:string
