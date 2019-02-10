@@ -22,29 +22,15 @@ namespace frontend.Controllers
         }
 
         [HttpGet("{accountId:guid}/Transactions")]
-        public Task<TransactionModel> GetTransactions(Guid accountId, CancellationToken token)
+        public async Task<TransactionModel> GetTransactions(Guid accountId, CancellationToken token)
         {
             var query = new GetTransactionQuery
             {
                 AccountId = accountId,
             };
 
-            var items = Enumerable.Range(-5, 5).Select(index => new TransactionItem
-            {
-                Id = Guid.NewGuid(),
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                Type = "Deposit",
-                Amount = 1000 + index * 3,
-                Summary = "Deposited at bank"
-            });
-
-            var tx = new TransactionModel()
-            {
-                CurrentBalance = items.Sum(a=> a.Amount),
-                Transactions = items,
-            };
-
-            return Task.FromResult(tx);
+            var result = await mediator.Send(query, token);
+            return result;
         }
 
         [HttpPost("{accountId:guid}/[action]")]
