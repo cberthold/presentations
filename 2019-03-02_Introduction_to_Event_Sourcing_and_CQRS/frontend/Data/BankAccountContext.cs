@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
@@ -5,7 +6,7 @@ namespace frontend.Data
 {
     public class BankAccountsContext : DbContext
     {
-        public BloggingContext(DbContextOptions<BankAccountsContext> options)
+        public BankAccountsContext(DbContextOptions<BankAccountsContext> options)
             : base(options)
         { }
 

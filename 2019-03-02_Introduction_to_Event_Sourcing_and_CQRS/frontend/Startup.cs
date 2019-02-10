@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using frontend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace frontend
 {
@@ -31,6 +33,9 @@ namespace frontend
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDbContext<BankAccountsContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("BankAccountContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
