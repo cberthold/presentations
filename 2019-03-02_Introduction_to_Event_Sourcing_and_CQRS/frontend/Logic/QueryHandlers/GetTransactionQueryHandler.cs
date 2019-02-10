@@ -23,6 +23,10 @@ namespace frontend.Logic.QueryHandlers
 
             var itemsFromDb = await (from t in context.Transactions
                               where t.AccountId == request.AccountId
+                              orderby 
+                                t.Date descending, 
+                                t.Type,
+                                t.TransactionId
                               select t).ToArrayAsync(cancellationToken);
 
 
