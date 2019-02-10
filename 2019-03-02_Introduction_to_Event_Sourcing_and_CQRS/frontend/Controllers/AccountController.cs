@@ -5,15 +5,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using frontend.Models;
+using frontend.Logic.Commands;
+using frontend.Logic.Queries;
+using MediatR;
 
 namespace frontend.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
+        private readonly IMediator mediator;
+
+        public AccountController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
         [HttpGet("{accountId:guid}/Transactions")]
         public Task<TransactionModel> GetTransactions(Guid accountId, CancellationToken token)
         {
+            var query = new GetTransactionQuery
+            {
+                AccountId = accountId,
+            };
+
             var items = Enumerable.Range(-5, 5).Select(index => new TransactionItem
             {
                 Id = Guid.NewGuid(),
