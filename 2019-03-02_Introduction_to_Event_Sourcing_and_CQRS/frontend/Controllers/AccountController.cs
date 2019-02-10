@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using frontend.Models;
 
 namespace frontend.Controllers
 {
@@ -51,36 +52,6 @@ namespace frontend.Controllers
             };
 
             return Ok(response);
-        }
-
-        public class TransactionResponse {
-            public string Type { get; set; }
-            public decimal Amount {get; set; }
-        }
-
-        public class DepositModel
-        {
-            public decimal Amount { get; set; }
-        }
-
-        public class WithdrawalModel
-        {
-            public decimal Amount { get; set; }
-        }
-
-        public class TransactionModel
-        {
-            public decimal CurrentBalance {get; set; }
-            public IEnumerable<TransactionItem> Transactions { get; set; }
-        }
-
-        public class TransactionItem
-        {
-            public Guid Id { get; set; }
-            public string DateFormatted { get; set; }
-            public string Type { get; set; }
-            public decimal Amount { get; set; }
-            public string Summary { get; set; }
         }
     }
 }
