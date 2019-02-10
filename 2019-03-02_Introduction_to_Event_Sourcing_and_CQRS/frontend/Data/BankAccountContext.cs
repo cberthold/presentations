@@ -1,6 +1,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace frontend.Data
 {
@@ -10,12 +12,22 @@ namespace frontend.Data
             : base(options)
         { }
 
+
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Deposit> Deposits { get; set; }
     }
 
     public class Account
     {
+
+        public Account() {
+            AccountId = Guid.NewGuid();
+        }
+
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid AccountId { get; set; }
         public string AccountName { get; set; }
         public decimal CurrentBalance { get; set; }
@@ -26,6 +38,12 @@ namespace frontend.Data
 
     public class Deposit
     {
+        public Deposit() {
+            DepositId = Guid.NewGuid();
+        }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid DepositId { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
@@ -36,6 +54,12 @@ namespace frontend.Data
 
     public class Withdrawal
     {
+        public Withdrawal() {
+            WithdrawalId = Guid.NewGuid();
+        }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid WithdrawalId { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
