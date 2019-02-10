@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using frontend.Models;
+using frontend.Logic.Queries;
 using MediatR;
 
-namespace frontend.Logic.Queries
+namespace frontend.Logic.QueryHandlers
 {
     public class GetTransactionQueryHandler : IRequestHandler<GetTransactionQuery, TransactionModel>
     {

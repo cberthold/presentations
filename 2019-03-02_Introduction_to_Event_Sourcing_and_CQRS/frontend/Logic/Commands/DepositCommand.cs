@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using frontend.Models;
+using MediatR;
 
 namespace frontend.Logic.Commands
 {
-    public class DepositCommand
+    public class DepositCommand : IRequest<TransactionResponse>
     {
-
+        public Guid AccountId { get; set; }
+        public decimal Amount { get; set; }
     }
 }
