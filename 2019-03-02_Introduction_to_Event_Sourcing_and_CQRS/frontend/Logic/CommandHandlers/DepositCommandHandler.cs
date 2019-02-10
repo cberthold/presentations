@@ -6,19 +6,37 @@ using System.Threading.Tasks;
 using frontend.Models;
 using frontend.Logic.Commands;
 using MediatR;
+using frontend.Data;
 
 namespace frontend.Logic.CommandHandlers
 {
     public class DepositCommandHandler : IRequestHandler<DepositCommand, TransactionResponse>
     {
-        public Task<TransactionResponse> Handle(DepositCommand request, CancellationToken cancellationToken)
+        private readonly IBankAccountsContext context;
+
+        public DepositCommandHandler(IBankAccountsContext context)
         {
+            this.context = context;
+        }
+
+        public async Task<TransactionResponse> Handle(DepositCommand request, CancellationToken cancellationToken)
+        {
+            var deposit = new Deposit
+            {
+                Date = DateTime.Today,
+                Amount = request.Amount,
+                AccountId = request.AccountId,
+            };
+
+            context.Deposits.Add(deposit);
+            await context.SaveChangesAsync(cancellationToken);
+
             var response = new TransactionResponse {
                 Type = "Deposit",
                 Amount = request.Amount,
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }
