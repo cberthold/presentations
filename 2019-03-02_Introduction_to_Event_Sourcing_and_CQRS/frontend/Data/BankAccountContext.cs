@@ -29,7 +29,15 @@ namespace frontend.Data
     {
         public BankAccountsContext(DbContextOptions<BankAccountsContext> options)
             : base(options)
-        { }
+        { 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var transactionsView = modelBuilder.Entity<TransactionsView>();
+            transactionsView.ToTable("TransactionsView")
+                .HasKey(a=>a.TransactionId);
+        }
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Deposit> Deposits { get; set; }
@@ -41,6 +49,8 @@ namespace frontend.Data
 
     public class TransactionsView
     {
+        public Guid AccountId { get; set; }
+        [Key]
         public Guid TransactionId { get; set; }
         public string Type { get; set; }
         public decimal Amount { get; set; }
