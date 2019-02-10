@@ -34,8 +34,12 @@ namespace frontend
                 configuration.RootPath = "ClientApp/build";
             });
 
+            // add bank accounts context
             services.AddDbContext<BankAccountsContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("BankAccountContext")));
+
+            // and map to its interface as well
+            services.AddScoped<IBankAccountsContext, BankAccountsContext>((svc) => svc.GetRequiredService<BankAccountsContext>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
