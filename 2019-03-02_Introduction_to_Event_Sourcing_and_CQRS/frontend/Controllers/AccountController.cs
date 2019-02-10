@@ -34,24 +34,26 @@ namespace frontend.Controllers
         }
 
         [HttpPost("{accountId:guid}/[action]")]
-        public IActionResult Deposit(Guid accountId, DepositModel model, CancellationToken token)
+        public async Task<IActionResult> Deposit(Guid accountId, DepositModel model, CancellationToken token)
         {
-            var response = new TransactionResponse {
-                Type = "Deposit",
+            var command = new DepositCommand {
+                AccountId = accountId,
                 Amount = model.Amount,
             };
 
+            var response = await mediator.Send(command, token);
             return Ok(response);
         }
 
         [HttpPost("{accountId:guid}/[action]")]
-        public IActionResult Withdrawal(Guid accountId, WithdrawalModel model, CancellationToken token)
+        public async Task<IActionResult> Withdrawal(Guid accountId, WithdrawalModel model, CancellationToken token)
         {
-            var response = new TransactionResponse {
-                Type = "Withdrawal",
+            var command = new WithdrawalCommand {
+                AccountId = accountId,
                 Amount = model.Amount,
             };
 
+            var response = await mediator.Send(command, token);
             return Ok(response);
         }
     }
