@@ -35,6 +35,8 @@ AS
     FROM [Withdrawals] w
 
 GO");
+
+            migrationBuilder.Sql("INSERT INTO Accounts (AccountId, AccountName) VALUES ('4ff8fae5-e2fe-4d65-9f59-cf95cb5f31ea','Chris Berthold')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
