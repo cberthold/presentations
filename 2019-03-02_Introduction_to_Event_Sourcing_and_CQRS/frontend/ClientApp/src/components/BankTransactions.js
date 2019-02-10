@@ -4,13 +4,9 @@ import { connect } from 'react-redux';
 import { actionCreators } from '../store/BankTransactions';
 
 class BankTransactions extends Component {
-    componentWillMount() {
+    componentDidMount() {
+      
       // This method runs when the component is first added to the page
-      this.props.requestBankTransactions();
-    }
-  
-    componentWillReceiveProps(nextProps) {
-      // This method runs when incoming props (e.g., route params) change
       this.props.requestBankTransactions();
     }
   
@@ -21,34 +17,43 @@ class BankTransactions extends Component {
         <button disabled={this.props.isLoading} onClick={this.props.requestBankTransactions}>Refresh</button>
 
         <h2>Current Balance: {this.props.currentBalance}</h2>
-        {renderTransactionsTable(this.props)}
+        {this.renderTransactionsTable(this.props)}
     </div>);
     }
-  }
-  
-  function renderTransactionsTable(props) {
-    return (
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Transaction Type</th>
-            <th>Amount</th>
-            {/*<th>Summary</th>*/}
-          </tr>
-        </thead>
-        <tbody>
-          {props.transactions.map(tx =>
-            <tr key={tx.id}>
-              <td>{tx.dateFormatted}</td>
-              <td>{tx.type}</td>
-              <td>{tx.amount}</td>
-              {/*<td>{forecast.summary}</td>*/}
+
+    renderTransactionsTable(props) {
+      return (
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Transaction Type</th>
+              <th>Amount</th>
+              {/*<th>Summary</th>*/}
             </tr>
-          )}
-        </tbody>
-      </table>
-    );
+          </thead>
+          <tbody>
+            {this.renderMapTransactions(this.props.transactions)}
+          </tbody>
+        </table>
+      );
+    }
+
+    renderMapTransactions(txs) {
+      if(!txs) return [];
+
+      return txs.map(tx => this.renderTransactionRow(tx));
+    }
+
+    renderTransactionRow(tx) {
+      return (<tr key={tx.id}>
+                <td>{tx.dateFormatted}</td>
+                <td>{tx.type}</td>
+                <td>{tx.amount}</td>
+                {/*<td>{forecast.summary}</td>*/}
+              </tr>);
+    }
+
   }
   
 
