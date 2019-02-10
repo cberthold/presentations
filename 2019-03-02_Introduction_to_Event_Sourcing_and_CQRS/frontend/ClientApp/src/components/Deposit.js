@@ -9,7 +9,7 @@ const Deposit = props => (
 
     <p>$</p>
 
-    <button onClick={props.deposit}>Deposit</button>
+    <button onClick={props.submitDeposit(0.00)}>Deposit</button>
   </div>
 );
 

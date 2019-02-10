@@ -29,9 +29,7 @@ export const actionCreators = {
         body: JSON.stringify(data), // body data type must match "Content-Type" header
     });
 
-    const response = await response.json();
-
-    dispatch({ type: submitSuccessType, transactions, currentBalance });
+    dispatch({ type: submitSuccessType });
   }
 };
 

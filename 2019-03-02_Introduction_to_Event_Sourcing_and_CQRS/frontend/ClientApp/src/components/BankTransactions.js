@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store/BankTransactions';
@@ -18,9 +18,9 @@ class BankTransactions extends Component {
       return (
           <div>
         <h1>Current Transactions</h1>
-        <button disabled={props.isLoading} onClick={props.requestBankTransactions()}>Refresh</button>
+        <button disabled={this.props.isLoading} onClick={this.props.requestBankTransactions}>Refresh</button>
 
-        <h2>Current Balance: {props.currentBalance}</h2>
+        <h2>Current Balance: {this.props.currentBalance}</h2>
 
         {renderTransactionsTable(this.props)}
     </div>);
