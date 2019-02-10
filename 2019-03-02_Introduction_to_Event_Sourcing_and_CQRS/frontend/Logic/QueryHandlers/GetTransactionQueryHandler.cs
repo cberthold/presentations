@@ -18,7 +18,7 @@ namespace frontend.Logic.QueryHandlers
         {
             this.context = context;
         }
-        public async Task<TransactionModel> Handle(GetTransactionQuery request, CancellationToken cancellationToken)
+        public async Task<TransactionModel> HandleAsync(GetTransactionQuery request, CancellationToken cancellationToken)
         {
 
             var itemsFromDb = await (from t in context.Transactions
