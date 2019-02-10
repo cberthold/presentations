@@ -9,11 +9,11 @@ const Deposit = props => (
 
     <p>$</p>
 
-    <button onClick={props.submitDeposit(0.00)}>Deposit</button>
+    <button onClick={() => props.submitDeposit(0.00)}>Deposit</button>
   </div>
 );
 
 export default connect(
-  state => state.deposits,
+  state => state.deposit,
   dispatch => bindActionCreators(actionCreators, dispatch)
 )(Deposit);

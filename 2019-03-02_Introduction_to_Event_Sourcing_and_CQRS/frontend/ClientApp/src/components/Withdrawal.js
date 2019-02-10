@@ -9,11 +9,11 @@ const Withdrawal = props => (
 
     <p>$</p>
 
-    <button onClick={props.submitWithdrawal(0.00)}>Withdrawal</button>
+    <button onClick={() => props.submitWithdrawal(0.00)}>Withdrawal</button>
   </div>
 );
 
 export default connect(
-  state => state.withdrawals,
+  state => state.withdrawal,
   dispatch => bindActionCreators(actionCreators, dispatch)
 )(Withdrawal);

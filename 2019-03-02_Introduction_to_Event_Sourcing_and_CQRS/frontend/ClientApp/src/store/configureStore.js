@@ -7,7 +7,7 @@ import * as BankTransactions from './BankTransactions';
 
 export default function configureStore(history, initialState) {
   const reducers = {
-    transactions: BankTransactions.reducer,
+    bankTransactions: BankTransactions.reducer,
     deposit: Deposit.reducer,
     withdrawal: Withdrawal.reducer
   };

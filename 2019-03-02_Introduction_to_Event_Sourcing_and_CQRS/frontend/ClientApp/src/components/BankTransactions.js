@@ -16,12 +16,11 @@ class BankTransactions extends Component {
   
     render() {
       return (
-          <div>
+      <div>
         <h1>Current Transactions</h1>
         <button disabled={this.props.isLoading} onClick={this.props.requestBankTransactions}>Refresh</button>
 
         <h2>Current Balance: {this.props.currentBalance}</h2>
-
         {renderTransactionsTable(this.props)}
     </div>);
     }
@@ -55,6 +54,6 @@ class BankTransactions extends Component {
 
 
 export default connect(
-  state => state.transactions,
+  state => state.bankTransactions,
   dispatch => bindActionCreators(actionCreators, dispatch)
 )(BankTransactions);
