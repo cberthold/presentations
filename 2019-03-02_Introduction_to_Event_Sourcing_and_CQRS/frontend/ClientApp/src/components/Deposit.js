@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store/Deposit';
 
-const Deposit = props => (
-  <div>
-    <h1>Deposit Amount</h1>
+class Deposit extends React.Component {
+  
+  constructor(props)
+  {
+    super(props);
 
-    <p>$</p>
+    this.state = {
+      depositAmount: 0.00,
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-    <button onClick={() => props.submitDeposit(0.00)}>Deposit</button>
-  </div>
-);
+  handleChange(event){
+    var value = event.target.value;
+    this.setState({depositAmount: value});
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Deposit Amount</h1>
+    
+        <p>$<input type="number" step="0.01" min="0" value={this.state.depositAmount} onChange={this.handleChange}/></p>
+    
+        <button onClick={() => this.props.submitDeposit(this.state.depositAmount)}>Deposit</button>
+      </div>
+    );
+  }
+}
 
 export default connect(
   state => state.deposit,
