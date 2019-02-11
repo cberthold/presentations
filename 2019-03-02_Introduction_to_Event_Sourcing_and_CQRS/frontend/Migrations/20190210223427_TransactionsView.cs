@@ -31,7 +31,7 @@ AS
         , TransactionId = w.WithdrawalId
         , Type = 'Withdrawal'
         , Date = w.Date
-        , Amount = w.Amount
+        , Amount = w.Amount * -1.00
     FROM [Withdrawals] w
 
 GO");
