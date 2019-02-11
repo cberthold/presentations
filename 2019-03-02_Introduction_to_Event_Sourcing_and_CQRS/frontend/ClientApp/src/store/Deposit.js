@@ -12,8 +12,10 @@ export const actionCreators = {
 
     dispatch({ type: submitDepositType });
 
+    var parsedDepositAmount = parseFloat(parseFloat(depositAmount).toFixed(2));
+
     const data = {
-      amount: depositAmount,
+      amount: parsedDepositAmount,
     };
 
     const url = `api/Account/${accountNumber}/Deposit`;
