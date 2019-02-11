@@ -34,7 +34,7 @@ namespace frontend.Controllers
         }
 
         [HttpPost("{accountId:guid}/[action]")]
-        public async Task<IActionResult> Deposit(Guid accountId, DepositModel model, CancellationToken token)
+        public async Task<IActionResult> Deposit(Guid accountId, [FromBody] DepositModel model, CancellationToken token)
         {
             var command = new DepositCommand {
                 AccountId = accountId,
@@ -46,7 +46,7 @@ namespace frontend.Controllers
         }
 
         [HttpPost("{accountId:guid}/[action]")]
-        public async Task<IActionResult> Withdrawal(Guid accountId, WithdrawalModel model, CancellationToken token)
+        public async Task<IActionResult> Withdrawal(Guid accountId, [FromBody] WithdrawalModel model, CancellationToken token)
         {
             var command = new WithdrawalCommand {
                 AccountId = accountId,
