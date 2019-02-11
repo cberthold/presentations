@@ -12,8 +12,10 @@ export const actionCreators = {
 
     dispatch({ type: submitWithdrawalType });
 
+    var parsedWithdrawalAmount = parseFloat(parseFloat(withdrawalAmount).toFixed(2));
+
     const data = {
-      amount: withdrawalAmount,
+      amount: parsedWithdrawalAmount,
     };
 
     const url = `api/Account/${accountNumber}/Withdrawal`;
