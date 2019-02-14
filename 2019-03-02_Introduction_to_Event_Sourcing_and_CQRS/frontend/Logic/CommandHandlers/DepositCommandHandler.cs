@@ -28,15 +28,23 @@ namespace frontend.Logic.CommandHandlers
                 AccountId = request.AccountId,
             };
 
-            context.Deposits.Add(deposit);
-            await context.SaveChangesAsync(cancellationToken);
+            using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
+            {
 
-            var response = new TransactionResponse {
-                Type = "Deposit",
-                Amount = request.Amount,
-            };
+                context.Deposits.Add(deposit);
+                await context.SaveChangesAsync(cancellationToken);
 
-            return response;
+                tx.Commit();
+
+                var response = new TransactionResponse
+                {
+                    Type = "Deposit",
+                    Amount = request.Amount,
+                };
+
+                return response;
+            }
+
         }
     }
 }

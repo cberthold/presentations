@@ -27,16 +27,21 @@ namespace frontend.Logic.CommandHandlers
                 Amount = request.Amount,
                 AccountId = request.AccountId,
             };
+            using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
+            {
+                context.Withdrawals.Add(withdrawal);
+                await context.SaveChangesAsync(cancellationToken);
 
-            context.Withdrawals.Add(withdrawal);
-            await context.SaveChangesAsync(cancellationToken);
+                tx.Commit();
 
-            var response = new TransactionResponse {
-                Type = "Withdrawal",
-                Amount = request.Amount,
-            };
+                var response = new TransactionResponse
+                {
+                    Type = "Withdrawal",
+                    Amount = request.Amount,
+                };
 
-            return response;
+                return response;
+            }
         }
 
     }
