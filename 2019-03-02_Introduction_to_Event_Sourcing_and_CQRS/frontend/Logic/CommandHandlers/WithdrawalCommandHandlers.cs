@@ -7,16 +7,14 @@ using frontend.Models;
 using frontend.Logic.Commands;
 using MediatR;
 using frontend.Data;
-using frontend.Logic.DomainEvents;
 
 namespace frontend.Logic.CommandHandlers
 {
     public class WithdrawalCommandHandler : IRequestHandler<WithdrawalCommand, TransactionResponse>
     {
         private readonly IBankAccountsContext context;
-        private readonly IMediator mediator;
 
-        public WithdrawalCommandHandler(IBankAccountsContext context, IMediator mediator)
+        public WithdrawalCommandHandler(IBankAccountsContext context)
         {
             this.context = context;
         }
@@ -29,22 +27,12 @@ namespace frontend.Logic.CommandHandlers
                 Amount = request.Amount,
                 AccountId = request.AccountId,
             };
-
             using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
             {
                 context.Withdrawals.Add(withdrawal);
                 await context.SaveChangesAsync(cancellationToken);
 
                 tx.Commit();
-                
-                var depositedEvent = new AmountWithdrawnEvent(
-                    withdrawal.WithdrawalId,
-                    withdrawal.Amount,
-                    withdrawal.Date,
-                    withdrawal.AccountId);
-
-                await mediator.Publish(depositedEvent, cancellationToken);
-                
 
                 var response = new TransactionResponse
                 {
