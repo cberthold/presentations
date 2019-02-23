@@ -41,9 +41,6 @@ namespace frontend.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var transactionsView = modelBuilder.Entity<TransactionsView>();
-            transactionsView.ToTable("TransactionsView")
-                .HasKey(a=>a.TransactionId);
         }
 
         public DbSet<Account> Accounts { get; set; }
