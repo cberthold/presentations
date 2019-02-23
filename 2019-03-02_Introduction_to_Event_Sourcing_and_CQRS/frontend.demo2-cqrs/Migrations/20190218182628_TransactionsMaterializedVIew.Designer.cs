@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using frontend.Data;
 
 namespace frontend.Migrations
 {
     [DbContext(typeof(BankAccountsContext))]
-    partial class BankAccountsContextModelSnapshot : ModelSnapshot
+    [Migration("20190218182628_TransactionsMaterializedVIew")]
+    partial class TransactionsMaterializedVIew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
