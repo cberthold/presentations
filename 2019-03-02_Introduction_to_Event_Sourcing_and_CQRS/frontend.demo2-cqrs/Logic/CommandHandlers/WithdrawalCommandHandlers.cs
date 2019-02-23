@@ -19,6 +19,7 @@ namespace frontend.Logic.CommandHandlers
         public WithdrawalCommandHandler(IBankAccountsContext context, IMediator mediator)
         {
             this.context = context;
+            this.mediator = mediator;
         }
 
         public async Task<TransactionResponse> Handle(WithdrawalCommand request, CancellationToken cancellationToken)
