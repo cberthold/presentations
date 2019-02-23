@@ -33,18 +33,18 @@ namespace frontend.Logic.CommandHandlers
             using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
             {
                 context.Withdrawals.Add(withdrawal);
-                await context.SaveChangesAsync(cancellationToken);
 
                 tx.Commit();
                 
-                var depositedEvent = new AmountWithdrawnEvent(
+                var withdrawnEvent = new AmountWithdrawnEvent(
                     withdrawal.WithdrawalId,
                     withdrawal.Amount,
                     withdrawal.Date,
                     withdrawal.AccountId);
 
-                await mediator.Publish(depositedEvent, cancellationToken);
-                
+                await mediator.Publish(withdrawnEvent, cancellationToken);
+
+                await context.SaveChangesAsync(cancellationToken);
 
                 var response = new TransactionResponse
                 {
