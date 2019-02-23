@@ -43,6 +43,7 @@ namespace frontend.Logic.DomainEventHandlers
                 Amount = notification.Amount,
                 Date = notification.Date,
                 AccountId = notification.AccountId,
+                Type = "Withdrawal"
             };
 
             await context.Transactions.AddAsync(transaction);
