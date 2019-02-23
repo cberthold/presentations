@@ -35,7 +35,6 @@ namespace frontend.Logic.CommandHandlers
             {
 
                 context.Deposits.Add(deposit);
-                await context.SaveChangesAsync(cancellationToken);
                 
                 var depositedEvent = new AmountDepositedEvent(
                     deposit.DepositId,
@@ -45,6 +44,7 @@ namespace frontend.Logic.CommandHandlers
 
                 await mediator.Publish(depositedEvent, cancellationToken);
                 
+                await context.SaveChangesAsync(cancellationToken);
                 tx.Commit();
 
                 var response = new TransactionResponse
