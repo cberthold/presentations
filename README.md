@@ -18,7 +18,13 @@
 2017/11/02 Software Architecture: Introduction to Object Oriented Design Patterns [URL](https://github.com/cberthold/presentations/tree/master/2017-11-02-Object-Design-Patterns)
   * Presentation on the introduction to Software Architecture with Object Oriented Design Patterns
   
-2018/02/01 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS)
+2018/02/01 DevOps Made Easier with Visual Studio Team Services [URL](https://github.com/cberthold/presentations/tree/master/2018-02-01-DevOps-Made-Easier)
+  * Presentation on an introduction to DevOps Continuous Integration and Continuous Delivery using Visual Studio Team Services and the new Azure DevOps Project (currently in preview)
+  
+2018/11/01 Thinking in Docker [URL](https://github.com/cberthold/presentations/tree/master/2018-11-01_Thinking_in_Docker)
+  * Presentation on Thinking in Docker concepts and demos of possibilities and practices Docker can bring to your every day development and deployment practices
+  
+2018/03/02 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS)
   * Presentation on introducing concepts of Event Sourcing and CQRS.
   
   
