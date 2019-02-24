@@ -11,12 +11,14 @@
 
   <ItemGroup>
     <PackageReference Include="CQRSLite" Version="0.27.0" />
+    <PackageReference Include="Dapper" Version="1.50.7" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
+    <PackageReference Include="newtonsoft.json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
