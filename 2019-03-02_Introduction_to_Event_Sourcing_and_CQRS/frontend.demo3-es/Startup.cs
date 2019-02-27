@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using frontend.Data;
 using Microsoft.EntityFrameworkCore;
+using CQRSlite.Domain;
+using frontend.Infrastructure;
+using CQRSlite.Events;
 
 namespace frontend
 {
@@ -40,6 +43,10 @@ namespace frontend
 
             // and map to its interface as well
             services.AddScoped<IBankAccountsContext, BankAccountsContext>((svc) => svc.GetRequiredService<BankAccountsContext>());
+            
+            services.AddScoped<ISession, Session>();
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IEventStore, SqlEventStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
