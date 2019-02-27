@@ -35,12 +35,14 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
         };
 
         private readonly JsonSerializer serializer;
+        private readonly IEventPublisher publisher;
 
-        public SqlEventStore(IConfiguration configuration)
+        public SqlEventStore(IConfiguration configuration, IEventPublisher publisher)
         {
             eventStoreTable = "EventStore";
             connectionString = configuration.GetConnectionString("BankAccountContext");
             serializer = JsonSerializer.Create(settings);
+            this.publisher = publisher;
         }
 
         private async Task<SqlConnection> _GetConnection(CancellationToken cancellationToken)
@@ -110,7 +112,10 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
                 }
             }
 
-            // await publisher.Publish(commit);
+            foreach(var @event in events)
+            {
+                await publisher.PublishAsync(@event, cancellationToken);
+            }
         }
 
         private string SerializeData<TObject>(TObject obj)
