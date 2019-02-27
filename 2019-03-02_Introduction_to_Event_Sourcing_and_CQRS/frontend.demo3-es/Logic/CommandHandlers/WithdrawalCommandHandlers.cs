@@ -8,22 +8,23 @@ using frontend.Logic.Commands;
 using MediatR;
 using frontend.Data;
 using frontend.Logic.DomainEvents;
+using CQRSlite.Domain;
 
 namespace frontend.Logic.CommandHandlers
 {
     public class WithdrawalCommandHandler : IRequestHandler<WithdrawalCommand, TransactionResponse>
     {
-        private readonly IBankAccountsContext context;
-        private readonly IMediator mediator;
+        private readonly ISession session;
 
-        public WithdrawalCommandHandler(IBankAccountsContext context, IMediator mediator)
+        public WithdrawalCommandHandler(ISession session)
         {
-            this.context = context;
-            this.mediator = mediator;
+            this.session = session;
         }
 
         public async Task<TransactionResponse> Handle(WithdrawalCommand request, CancellationToken cancellationToken)
         {
+            var account = await session.GetOrCreateAccount(request.AccountId, cancellationToken);
+            
             var withdrawal = new Withdrawal
             {
                 Date = DateTime.Today,
@@ -31,31 +32,17 @@ namespace frontend.Logic.CommandHandlers
                 AccountId = request.AccountId,
             };
 
-            using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
+            account.Withdraw(withdrawal);
+
+            await session.Commit(cancellationToken);
+
+            var response = new TransactionResponse
             {
-                context.Withdrawals.Add(withdrawal);
+                Type = "Withdrawal",
+                Amount = request.Amount,
+            };
 
-                tx.Commit();
-                
-                var withdrawnEvent = new AmountWithdrawnEvent(
-                    withdrawal.WithdrawalId,
-                    withdrawal.Amount,
-                    withdrawal.Date,
-                    withdrawal.AccountId);
-
-                await mediator.Publish(withdrawnEvent, cancellationToken);
-
-                await context.SaveChangesAsync(cancellationToken);
-
-                var response = new TransactionResponse
-                {
-                    Type = "Withdrawal",
-                    Amount = request.Amount,
-                };
-
-                return response;
-            }
+            return response;
         }
-
     }
 }
