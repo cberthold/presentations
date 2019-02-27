@@ -5,7 +5,7 @@ using MediatR;
 
 namespace frontend.Logic.DomainEvents
 {
-    public class AmountDepositedEvent : INotification
+    public class AmountDepositedEvent : AbstractDomainEvent
     {
         public Guid DepositId { get; private set; }
         public decimal Amount { get; private set; }
