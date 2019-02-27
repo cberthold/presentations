@@ -8,54 +8,39 @@ using frontend.Logic.Commands;
 using MediatR;
 using frontend.Data;
 using frontend.Logic.DomainEvents;
+using CQRSlite.Domain;
 
 namespace frontend.Logic.CommandHandlers
 {
     public class DepositCommandHandler : IRequestHandler<DepositCommand, TransactionResponse>
     {
-        private readonly IBankAccountsContext context;
-        private readonly IMediator mediator;
+        private readonly ISession session;
 
-        public DepositCommandHandler(IBankAccountsContext context, IMediator mediator)
+        public DepositCommandHandler(ISession session)
         {
-            this.context = context;
-            this.mediator = mediator;
+            this.session = session;
         }
 
         public async Task<TransactionResponse> Handle(DepositCommand request, CancellationToken cancellationToken)
         {
+            var account = await session.GetOrCreateAccount(request.AccountId, cancellationToken);
             var deposit = new Deposit
             {
                 Date = DateTime.Today,
                 Amount = request.Amount,
                 AccountId = request.AccountId,
             };
+            account.Deposit(deposit);
+            await session.Commit(cancellationToken);
+            
 
-            using (var tx = await context.Database.BeginTransactionAsync(cancellationToken))
+            var response = new TransactionResponse
             {
+                Type = "Deposit",
+                Amount = request.Amount,
+            };
 
-                context.Deposits.Add(deposit);
-                
-                var depositedEvent = new AmountDepositedEvent(
-                    deposit.DepositId,
-                    deposit.Amount,
-                    deposit.Date,
-                    deposit.AccountId);
-
-                await mediator.Publish(depositedEvent, cancellationToken);
-                
-                await context.SaveChangesAsync(cancellationToken);
-                tx.Commit();
-
-                var response = new TransactionResponse
-                {
-                    Type = "Deposit",
-                    Amount = request.Amount,
-                };
-
-                return response;
-            }
-
+            return response;
         }
     }
 }
