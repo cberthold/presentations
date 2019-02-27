@@ -51,5 +51,26 @@ namespace frontend.Logic.DomainEvents
         {
             CurrentBalance += @event.Amount;
         }
+
+        public void Withdraw(Withdrawal withdrawal)
+        {
+            if(!IsAccountOpen)
+            {
+                throw new ApplicationException("Account is not open");
+            }
+
+            var withdrawnEvent = new AmountWithdrawnEvent(
+                    withdrawal.WithdrawalId,
+                    withdrawal.Amount,
+                    withdrawal.Date,
+                    withdrawal.AccountId);
+
+            ApplyChange(withdrawnEvent);
+        }
+
+        private void Apply(AmountWithdrawnEvent @event)
+        {
+            CurrentBalance -= @event.Amount;
+        }
     }
 }
