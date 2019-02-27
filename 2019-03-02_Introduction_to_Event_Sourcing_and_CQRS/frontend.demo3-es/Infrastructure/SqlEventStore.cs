@@ -12,17 +12,17 @@ using Newtonsoft.Json;
 using CQRSlite.Events;
 using Microsoft.Extensions.Configuration;
 
-namespace Flightdocs.Infrastructure.Domain
+namespace frontend.Infrastructure
 {
     public class SqlEventStore : IEventStore, IDisposable
     {
         private const string INSERT_SQL =
-@"DECLARE @Timestamp datetime2(7) = GETUTCDATE()
-INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[EventData],[CorrelationId],[ClientId],[CustomerId],[ExecutingUserId],[ExecutingUsername],[DisplayName]) VALUES (@CommitId,@AggregateId,@AggregateType,@Timestamp,@Version,@EventType,@EventData,@CorrelationId,@ClientId,@CustomerId,@ExecutingUserId,@ExecutingUsername,@DisplayName)
+@"
+INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[EventData]) VALUES (@CommitId,@AggregateId,@Timestamp,@Version,@EventType,@EventData)
 ";
 
         private const string SELECT_SQL =
-@"SELECT CommitId, AggregateId, Version, EventType, EventData, CorrelationId, ClientId, CustomerId, ExecutingUserId, ExecutingUsername, DisplayName
+@"SELECT CommitId, AggregateId, TimeStamp, Version, EventType, EventData
   FROM {0}
   WHERE AggregateId = @AggregateId AND [Version] > @FromVersion
   ORDER BY [Version]
@@ -84,6 +84,7 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
                                         CommitId = commitId,
                                         AggregateId = e.Id,
                                         Version = e.Version,
+                                        TimeStamp = e.TimeStamp,
                                         EventType = e.GetType().AssemblyQualifiedName,
                                         EventData = SerializeData(e),
                                     }).Batch(400);
@@ -127,6 +128,8 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
             public Guid CommitId { get; set; }
 
             public Guid AggregateId { get; set; }
+
+            public DateTimeOffset TimeStamp { get; set; }
 
             public int Version { get; set; }
 
