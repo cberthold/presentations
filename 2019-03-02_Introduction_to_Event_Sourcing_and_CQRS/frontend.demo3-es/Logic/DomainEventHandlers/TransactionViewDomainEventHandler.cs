@@ -33,6 +33,7 @@ namespace frontend.Logic.DomainEventHandlers
             };
 
             await context.Transactions.AddAsync(transaction);
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task Handle(AmountWithdrawnEvent notification, CancellationToken cancellationToken)
@@ -47,6 +48,7 @@ namespace frontend.Logic.DomainEventHandlers
             };
 
             await context.Transactions.AddAsync(transaction);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }
