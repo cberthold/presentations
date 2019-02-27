@@ -47,6 +47,7 @@ namespace frontend
             services.AddScoped<ISession, Session>();
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IEventStore, SqlEventStore>();
+            services.AddScoped<Infrastructure.IEventPublisher, Infrastructure.MediatorPublisher>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
