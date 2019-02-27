@@ -20,6 +20,16 @@
                 "${workspaceFolder}/frontend.demo2-cqrs/frontend.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build es",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/frontend.demo3-es/frontend.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

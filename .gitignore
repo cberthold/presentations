@@ -24,3 +24,4 @@ node_modules/
 /2016-04-28-Building-event-driven-architectures/es-todo-dotnet/TodoMvcApi/App_Data
 /2016-04-28-Building-event-driven-architectures/~$Event Driven Architecture Presentation.pptx
 /2016-04-28-Building-event-driven-architectures/._~$Event Driven Architecture Presentation.pptx
+.DS_Store
