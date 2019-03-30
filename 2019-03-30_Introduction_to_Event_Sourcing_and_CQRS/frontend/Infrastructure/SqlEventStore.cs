@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace frontend.Infrastructure
 {
-    public class SqlEventStore : IEventStore, IDisposable
+    public class SqlEventStore : IEventStore, IReplayEventStore, IDisposable
     {
         private const string INSERT_SQL =
 @"
@@ -26,6 +26,12 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
   FROM {0}
   WHERE AggregateId = @AggregateId AND [Version] > @FromVersion
   ORDER BY [Version]
+";
+
+        private const string GETALL_SELECT_SQL =
+ @"SELECT CommitId, AggregateId, TimeStamp, Version, EventType, EventData
+  FROM {0}
+  ORDER BY [Offset]
 ";
 
         private readonly string eventStoreTable;
@@ -43,6 +49,31 @@ INSERT INTO {0} ([CommitId],[AggregateId],[Timestamp],[Version],[EventType],[Eve
             connectionString = configuration.GetConnectionString("BankAccountContext");
             serializer = JsonSerializer.Create(settings);
             this.publisher = publisher;
+        }
+
+        public async Task ReplayAllEvents(CancellationToken cancellationToken)
+        {
+            var command = new CommandDefinition(string.Format(GETALL_SELECT_SQL, eventStoreTable), cancellationToken: cancellationToken);
+            using (var connection = await _GetConnection(cancellationToken))
+            {
+                var eventsQuery = await connection.QueryAsync<DocumentData>(command);
+
+                // create a function to deserialize event data
+                Func<string, string, IEvent> func = (eventType, data) =>
+                {
+                    var output = DeserializeData<IEvent>(data, Type.GetType(eventType));
+                    return output;
+                };
+
+                // deserialize the events from our documents
+                var events = from e in eventsQuery
+                             select func(e.EventType, e.EventData);
+
+                foreach (var @event in events)
+                {
+                    await publisher.PublishAsync(@event, cancellationToken);
+                }
+            }
         }
 
         private async Task<SqlConnection> _GetConnection(CancellationToken cancellationToken)

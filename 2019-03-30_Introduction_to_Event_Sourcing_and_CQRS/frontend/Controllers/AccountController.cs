@@ -56,5 +56,13 @@ namespace frontend.Controllers
             var response = await mediator.Send(command, token);
             return Ok(response);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ReplayAllEvents(CancellationToken token)
+        {
+            var command = new ReplayCommand();
+            await mediator.Send(command, token);
+            return Ok();
+        }
     }
 }
