@@ -24,9 +24,11 @@
 2018/11/01 Thinking in Docker [URL](https://github.com/cberthold/presentations/tree/master/2018-11-01_Thinking_in_Docker)
   * Presentation on Thinking in Docker concepts and demos of possibilities and practices Docker can bring to your every day development and deployment practices
   
-2018/03/02 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS)
+2018/03/02 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS) - South Florida Code Camp 2019
   * Presentation on introducing concepts of Event Sourcing and CQRS.
   
+2018/03/30 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-30_Introduction_to_Event_Sourcing_and_CQRS) - Orlando Code Camp 2019
+  * Presentation on introducing concepts of Event Sourcing and CQRS.  This version has been updated to truncate the comparison of CRUD to Event sourcing.  Also has added the ability of showing a replay of events.  (does not use projections for simplicity)
   
   
 
