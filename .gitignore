@@ -26,4 +26,4 @@ node_modules/
 /2016-04-28-Building-event-driven-architectures/._~$Event Driven Architecture Presentation.pptx
 .DS_Store
 /2019-03-30_Introduction_to_Event_Sourcing_and_CQRS/~$Introduction to CQRS and Event Sourcing.pptx
-healthchecksdb
+healthchecksdb*
