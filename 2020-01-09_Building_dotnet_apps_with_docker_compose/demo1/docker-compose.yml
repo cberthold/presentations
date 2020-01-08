@@ -1,0 +1,25 @@
+# compose file version compatability matrix https://docs.docker.com/compose/compose-file/
+version: '3.4'
+services:
+  nginx:
+    # https://hub.docker.com/_/nginx
+    image: nginx:latest
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx/demo1.conf:/etc/nginx/conf.d/demo1.conf
+      - ./php:/code
+    environment:
+      - DO_YOU_SEE_NGINX=YES
+    depends_on:
+      - php-fpm
+  php-fpm:
+    # https://hub.docker.com/_/php
+    image: php:7.3-fpm
+    ports:
+      - "9000:9000" 
+    environment:
+      - DO_YOU_SEE_PHP=YES
+    volumes:
+      - ./php:/code
+   
