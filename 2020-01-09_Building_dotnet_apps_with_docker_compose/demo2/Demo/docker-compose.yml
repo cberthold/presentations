@@ -16,6 +16,13 @@ services:
       dockerfile: Api/Dockerfile
     depends_on:
       - db
+  api2:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    depends_on:
+      - db
   db:
     container_name: sql-server-db
     image: microsoft/mssql-server-linux:2017-latest
