@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ServiceStack.Redis;
 
 namespace Api
 {
@@ -32,6 +33,7 @@ namespace Api
                .AddSqlServer(Configuration.GetConnectionString("DefaultDb"));
 
             services.AddHealthChecksUI();
+            services.AddScoped<IRedisClientsManager>(svc => new RedisManagerPool(Configuration.GetConnectionString("RedisCache")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
