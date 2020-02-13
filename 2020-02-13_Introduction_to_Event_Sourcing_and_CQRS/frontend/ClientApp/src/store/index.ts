@@ -1,9 +1,11 @@
 import * as WeatherForecasts from './WeatherForecasts';
 import * as Deposit from './Deposit';
+import * as Withdrawal from './Withdrawal';
 
 // The top-level state object
 export interface ApplicationState {
     deposit: Deposit.DepositState | undefined;
+    withdrawal: Withdrawal.WithdrawalState | undefined;
     weatherForecasts: WeatherForecasts.WeatherForecastsState | undefined;
 }
 
@@ -12,6 +14,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     deposit: Deposit.reducer,
+    withdrawal: Withdrawal.reducer,
     weatherForecasts: WeatherForecasts.reducer
 };
 
