@@ -17,11 +17,15 @@ namespace frontend
 
             if(args?.Where(a => a.ToLower() == "initdb").Any() == true)
             {
-                var dbinit = host.Services.GetService<MsSqlDatabaseInitializer>();
-                dbinit.Initialize();
+                using(var scope = host.Services.CreateScope())
+                {
+                    var service = scope.ServiceProvider;
+                    var dbinit = service.GetService<MsSqlDatabaseInitializer>();
+                    dbinit.Initialize();
 
-                var context = host.Services.GetService<BankAccountsContext>();
-                context.Database.Migrate();
+                    var context = service.GetService<BankAccountsContext>();
+                    context.Database.Migrate();
+                }
             }
             host.Run();
         }
