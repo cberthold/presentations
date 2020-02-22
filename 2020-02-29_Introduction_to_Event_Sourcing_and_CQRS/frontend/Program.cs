@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using frontend.Data;
 using Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace frontend
 {
@@ -17,6 +19,9 @@ namespace frontend
             {
                 var dbinit = host.Services.GetService<MsSqlDatabaseInitializer>();
                 dbinit.Initialize();
+
+                var context = host.Services.GetService<BankAccountsContext>();
+                context.Database.Migrate();
             }
             host.Run();
         }
