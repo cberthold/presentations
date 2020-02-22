@@ -47,10 +47,6 @@ namespace frontend
             
             services.AddScoped<ISession, Session>();
             services.AddScoped<IRepository, Repository>();
-            services.AddScoped<SqlEventStore>();
-            services.AddScoped<IEventStore>((s) => s.GetRequiredService<SqlEventStore>());
-            services.AddScoped<IReplayEventStore>((s) => s.GetRequiredService<SqlEventStore>());
-            services.AddScoped<Infrastructure.IEventPublisher, Infrastructure.MediatorPublisher>();
         
         }
 
