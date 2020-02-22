@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,8 +8,6 @@ using MediatR;
 using frontend.Data;
 using Microsoft.EntityFrameworkCore;
 using CQRSlite.Domain;
-using frontend.Infrastructure;
-using CQRSlite.Events;
 
 namespace frontend
 {
