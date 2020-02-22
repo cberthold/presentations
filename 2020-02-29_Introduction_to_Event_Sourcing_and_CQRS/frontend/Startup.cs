@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using CQRSlite.Domain;
 using CQRSlite.Events;
 using Infrastructure;
+using SqlStreamStore;
 
 namespace frontend
 {
@@ -36,9 +37,11 @@ namespace frontend
                 configuration.RootPath = "ClientApp/build";
             });
 
+            string bankAccountConnectionString = Configuration.GetConnectionString("BankAccountContext");
+
             // add bank accounts context
             services.AddDbContext<BankAccountsContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("BankAccountContext")));
+                options.UseSqlServer(bankAccountConnectionString));
 
             // and map to its interface as well
             services.AddScoped<IBankAccountsContext, BankAccountsContext>((svc) => svc.GetRequiredService<BankAccountsContext>());
@@ -48,6 +51,17 @@ namespace frontend
 
             // sql stream store
             services.AddTransient<IEventStore, SqlStreamStoreEventStoreAdapter>();
+
+            services.AddSingleton(
+                (svc)=> new MsSqlStreamStoreV3Settings(bankAccountConnectionString)
+                {
+                    Schema = "ES",
+                    DisableDeletionTracking = true,
+                });
+            
+            services.AddSingleton<MsSqlDatabaseInitializer>();
+            services.AddSingleton<MsSqlStreamStoreV3>();
+            services.AddTransient<IStreamStore>(svc => svc.GetService<MsSqlStreamStoreV3>());
         
         }
 

@@ -13,7 +13,8 @@ namespace frontend.Migrations
     public partial class AddEventStore : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {            
+        {   
+            /*         
             migrationBuilder.Sql(@"
 CREATE TABLE [dbo].[EventStore](
     [CommitId] [uniqueidentifier] NOT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE [dbo].[EventStore](
 	[Offset] [bigint] IDENTITY(1,1)
     PRIMARY KEY CLUSTERED ([AggregateId], [Version])
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-            ");
+            ");*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
