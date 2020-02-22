@@ -8,6 +8,8 @@ using MediatR;
 using frontend.Data;
 using Microsoft.EntityFrameworkCore;
 using CQRSlite.Domain;
+using CQRSlite.Events;
+using Infrastructure;
 
 namespace frontend
 {
@@ -42,7 +44,10 @@ namespace frontend
             services.AddScoped<IBankAccountsContext, BankAccountsContext>((svc) => svc.GetRequiredService<BankAccountsContext>());
             
             services.AddScoped<ISession, Session>();
-            services.AddScoped<IRepository, Repository>();
+            services.AddTransient<IRepository, Repository>();
+
+            // sql stream store
+            services.AddTransient<IEventStore, SqlStreamStoreEventStoreAdapter>();
         
         }
 
