@@ -63,7 +63,7 @@ class OpenNewAccount extends React.PureComponent<OpenNewAccountProps, ILocalStat
               <option value="Savings">Saving For The Future</option>
             </select>
           </p>
-          <button onClick={() => this.openNewAccount()}>Withdraw</button>
+          <button onClick={() => this.openNewAccount()}>Open Account</button>
         </div>
         {this.renderOpenNewAccounting()}
       </React.Fragment>
