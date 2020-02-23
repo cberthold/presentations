@@ -1,7 +1,7 @@
 import * as Deposit from './Deposit';
 import * as Withdrawal from './Withdrawal';
 import * as BankTransactions from './BankTransactions';
-import * as OpenNewAccount from './OpenNewAccount';
+import * as OpenNewAccount from './Accounts';
 
 // The top-level state object
 export interface ApplicationState {
