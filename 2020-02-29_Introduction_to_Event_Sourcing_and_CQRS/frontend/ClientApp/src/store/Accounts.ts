@@ -5,8 +5,15 @@ import { AppThunkAction } from '.';
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
-export interface OpenNewAccountState {
+export interface AccountState {
     isLoading: boolean;
+    accounts: AccountModel[];
+}
+
+export interface AccountModel {
+    accountId: string;
+    accountName: string;
+    currentBalance: number;
 }
 
 // -----------------
@@ -44,7 +51,7 @@ export const actionCreators = {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
 
-        if (appState && appState.openNewAccount && appState.openNewAccount.isLoading) {
+        if (appState && appState.account && appState.account.isLoading) {
             // Don't issue a duplicate request (we already have or are loading the requested data)
             return;
         }
@@ -96,9 +103,9 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: OpenNewAccountState = { isLoading: false };
+const unloadedState: AccountState = { isLoading: false, accounts: [] };
 
-export const reducer: Reducer<OpenNewAccountState> = (state: OpenNewAccountState | undefined, incomingAction: Action): OpenNewAccountState => {
+export const reducer: Reducer<AccountState> = (state: AccountState | undefined, incomingAction: Action): AccountState => {
     if (state === undefined) {
         return unloadedState;
     }
@@ -107,12 +114,14 @@ export const reducer: Reducer<OpenNewAccountState> = (state: OpenNewAccountState
     switch (action.type) {
         case 'SUBMIT_OPEN_NEW_ACCOUNT':
             return {
+                ...state,
                 isLoading: true
             };
         case 'OPEN_NEW_ACCOUNT_SUCCESS':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
+                ...state,
                 isLoading: false,
             };
         default:

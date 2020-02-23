@@ -13,7 +13,7 @@ interface ILocalState
 
 // At runtime, Redux will merge together...
 type OpenNewAccountProps =
-AccountsStore.OpenNewAccountState // ... state we've requested from the Redux store
+AccountsStore.AccountState // ... state we've requested from the Redux store
   & typeof AccountsStore.actionCreators // ... plus action creators we've requested
   & RouteComponentProps<{ /*startDateIndex: string*/ }>; // ... plus incoming routing parameters
 
@@ -81,6 +81,6 @@ class OpenNewAccount extends React.PureComponent<OpenNewAccountProps, ILocalStat
 }
 
 export default connect(
-  (state: ApplicationState) => state.openNewAccount, // Selects which state properties are merged into the component's props
+  (state: ApplicationState) => state.account, // Selects which state properties are merged into the component's props
   AccountsStore.actionCreators // Selects which action creators are merged into the component's props
 )(OpenNewAccount as any);
