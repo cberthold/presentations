@@ -44,6 +44,11 @@ class OpenNewAccount extends React.PureComponent<OpenNewAccountProps, ILocalStat
       [event.target.name]: value});
   }
 
+  private openNewAccount = () => {
+    const s = this.state;
+    this.props.submitOpenNewAccount(s.firstName, s.lastName, s.accountType);
+  }
+
   public render() {
     return (
       <React.Fragment>
@@ -58,7 +63,7 @@ class OpenNewAccount extends React.PureComponent<OpenNewAccountProps, ILocalStat
               <option value="Savings">Saving For The Future</option>
             </select>
           </p>
-          <button onClick={() => this.props.submitOpenNewAccount(this.state.openNewAccountAmount)}>Withdraw</button>
+          <button onClick={() => this.openNewAccount()}>Withdraw</button>
         </div>
         {this.renderOpenNewAccounting()}
       </React.Fragment>
