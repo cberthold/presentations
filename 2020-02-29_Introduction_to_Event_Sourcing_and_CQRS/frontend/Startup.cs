@@ -59,8 +59,8 @@ namespace frontend
                     DisableDeletionTracking = true,
                 });
             
-            services.AddSingleton<MsSqlDatabaseInitializer>();
-            services.AddSingleton<MsSqlStreamStoreV3>();
+            services.AddTransient<MsSqlDatabaseInitializer>();
+            services.AddTransient<MsSqlStreamStoreV3>();
             services.AddTransient<IStreamStore>(svc => svc.GetService<MsSqlStreamStoreV3>());
         
         }
