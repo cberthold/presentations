@@ -21,6 +21,15 @@ namespace frontend.Controllers
             this.mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<AccountModel>> GetAccounts(CancellationToken token)
+        {
+            var query = new GetAccountsQuery();
+
+            var result = await mediator.Send(query, token);
+            return result;
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> Open([FromBody] CreateAccountModel model, CancellationToken token)
         {

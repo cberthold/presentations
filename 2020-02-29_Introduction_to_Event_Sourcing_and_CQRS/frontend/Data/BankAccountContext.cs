@@ -65,12 +65,10 @@ namespace frontend.Data
     {
 
         public Account() {
-            AccountId = Guid.NewGuid();
         }
 
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid AccountId { get; set; }
         public string AccountName { get; set; }
         public decimal CurrentBalance { get; set; }
