@@ -9,10 +9,22 @@ namespace frontend.Logic.DomainEvents
     {
         public Guid AccountId { get; private set; }
 
+        public string FirstName { get; private set; }
+
+        public string LastName { get; private set; }
+
+        public string AccountType { get; private set; }
+
         public AccountOpenedEvent(
-            Guid accountId)
+            Guid accountId,
+            string firstName,
+            string lastName,
+            string accountType)
         {
             AccountId = accountId;
+            FirstName = firstName;
+            LastName = lastName;
+            AccountType = accountType;
         }
     }
 }
