@@ -23,7 +23,7 @@ namespace frontend.Logic.CommandHandlers
 
         public async Task<TransactionResponse> Handle(DepositCommand request, CancellationToken cancellationToken)
         {
-            var account = await session.GetOrCreateAccount(request.AccountId, cancellationToken);
+            var account = await session.GetAccount(request.AccountId, cancellationToken);
             var deposit = new Deposit
             {
                 Date = DateTime.Today,

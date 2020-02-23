@@ -23,7 +23,7 @@ namespace frontend.Logic.CommandHandlers
 
         public async Task<TransactionResponse> Handle(WithdrawalCommand request, CancellationToken cancellationToken)
         {
-            var account = await session.GetOrCreateAccount(request.AccountId, cancellationToken);
+            var account = await session.GetAccount(request.AccountId, cancellationToken);
             
             var withdrawal = new Withdrawal
             {
