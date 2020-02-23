@@ -21,6 +21,19 @@ namespace frontend.Controllers
             this.mediator = mediator;
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Open([FromBody] CreateAccountModel model, CancellationToken token)
+        {
+            var command = new OpenNewAccountCommand {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                AccountType = model.AccountType,
+            };
+
+            var response = await mediator.Send(command, token);
+            return Ok(response);
+        }
+
         [HttpGet("{accountId:guid}/Transactions")]
         public async Task<TransactionModel> GetTransactions(Guid accountId, CancellationToken token)
         {
