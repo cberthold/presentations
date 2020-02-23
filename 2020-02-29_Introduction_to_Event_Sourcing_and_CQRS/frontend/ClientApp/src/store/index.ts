@@ -1,12 +1,14 @@
 import * as Deposit from './Deposit';
 import * as Withdrawal from './Withdrawal';
 import * as BankTransactions from './BankTransactions';
+import * as OpenNewAccount from './OpenNewAccount';
 
 // The top-level state object
 export interface ApplicationState {
     bankTransactions: BankTransactions.BankTransactionsState | undefined;
     deposit: Deposit.DepositState | undefined;
     withdrawal: Withdrawal.WithdrawalState | undefined;
+    openNewAccount: OpenNewAccount.OpenNewAccountState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -16,6 +18,7 @@ export const reducers = {
     bankTransactions: BankTransactions.reducer,
     deposit: Deposit.reducer,
     withdrawal: Withdrawal.reducer,
+    openNewAccount: OpenNewAccount.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
