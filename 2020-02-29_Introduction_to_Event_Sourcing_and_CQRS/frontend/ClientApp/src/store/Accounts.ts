@@ -35,15 +35,74 @@ interface SubmitOpenNewAccountSuccessAction {
     accountId: string;
 }
 
+interface GetAccountsAction {
+    type: 'SUBMIT_GET_ACCOUNTS';
+}
+
+
+interface GetAccountsSuccessAction {
+    type: 'GET_ACCOUNTS_SUCCESS';
+    accounts: AccountModel[];
+}
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = SubmitOpenNewAccountAction | SubmitOpenNewAccountSuccessAction;
+type KnownAction = 
+    SubmitOpenNewAccountAction | 
+    SubmitOpenNewAccountSuccessAction |
+    GetAccountsAction |
+    GetAccountsSuccessAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
+    getAccounts: (refresh: boolean): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        // Only load data if it's something we don't already have (and are not already loading)
+        const appState = getState();
+
+        if (appState && 
+            appState.account && 
+            appState.account.accounts &&
+            appState.account.accounts.length > 0 &&
+            !refresh) {
+            // Don't issue a duplicate request (we already have or are loading the requested data)
+            return;
+        }
+
+        const url = `api/Account`;
+        
+        try
+        {
+            
+            dispatch({ 
+                type: 'SUBMIT_GET_ACCOUNTS'
+            });
+
+            const response = await fetch(url, {
+                method: "GET", // *GET, POST, PUT, DELETE, etc.
+                mode: "cors", // no-cors, cors, *same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, *same-origin, omit
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const responseJson = await response.json();
+            
+            dispatch({ 
+                type: 'GET_ACCOUNTS_SUCCESS',
+                accounts: responseJson,
+            });
+        } 
+        catch(err)
+        {
+            console.log(err);
+        }
+
+    },
     submitOpenNewAccount: (
         firstName: string,
         lastName: string,
@@ -123,6 +182,11 @@ export const reducer: Reducer<AccountState> = (state: AccountState | undefined, 
             return {
                 ...state,
                 isLoading: false,
+            };
+        case 'GET_ACCOUNTS_SUCCESS':
+            return {
+                ...state,
+                accounts: action.accounts,
             };
         default:
             return state;
