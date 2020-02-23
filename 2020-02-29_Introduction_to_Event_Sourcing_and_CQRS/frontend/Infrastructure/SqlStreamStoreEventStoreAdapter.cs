@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
-using Newtonsoft.Json;
 using SqlStreamStore;
 using SqlStreamStore.Streams;
 
@@ -12,10 +11,6 @@ namespace Infrastructure
 {
     public class SqlStreamStoreEventStoreAdapter : IEventStore
     {
-        private static readonly JsonSerializerSettings SETTINGS = new JsonSerializerSettings {
-            TypeNameHandling = TypeNameHandling.None,
-        };
-
         private readonly IStreamStore store;
 
         public SqlStreamStoreEventStoreAdapter(IStreamStore store)
@@ -42,7 +37,7 @@ namespace Infrastructure
             {
                 foreach(var message in page.Messages)
                 {
-                    var @event = await RehydrateEvent(page, message, cancellationToken);
+                    var @event = await message.RehydrateEvent(cancellationToken);
                     returnEvents.Add(@event);
                 }
 
@@ -57,11 +52,7 @@ namespace Infrastructure
             return returnEvents;
         }
 
-        private async Task<IEvent> RehydrateEvent(ReadStreamPage page, StreamMessage message, CancellationToken cancellationToken)
-        {
-            var jsonData = await message.GetJsonData(cancellationToken);
-            return DeserializeData<IEvent>(jsonData, message.Type);
-        }
+        
 
         public async Task Save(IEnumerable<IEvent> events, CancellationToken cancellationToken = default)
         {
@@ -95,8 +86,8 @@ namespace Infrastructure
             };
             Guid messageId = Guid.NewGuid();
             string eventType = @event.GetType().FullName;
-            string jsonData = SerializeData(@event);
-            string jsonMetadata = SerializeData(@metadata);
+            string jsonData = @event.SerializeData();
+            string jsonMetadata = @metadata.SerializeData();
             return new NewStreamMessageWrapper
             {
                 Index = index,
@@ -106,17 +97,6 @@ namespace Infrastructure
             };
         }
 
-
-        private static string SerializeData<TObject>(TObject obj)
-        {
-            return JsonConvert.SerializeObject(obj, SETTINGS);
-        }
-
-        private static TObject DeserializeData<TObject>(string data, string typeString)
-        {
-            var type = Type.GetType(typeString);
-            return (TObject)JsonConvert.DeserializeObject(data, type, SETTINGS);
-        }
 
         public class NewStreamMessageWrapper
         {
