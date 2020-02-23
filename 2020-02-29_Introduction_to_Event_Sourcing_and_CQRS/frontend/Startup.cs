@@ -62,7 +62,7 @@ namespace frontend
             services.AddTransient<MsSqlDatabaseInitializer>();
             services.AddTransient<MsSqlStreamStoreV3>();
             services.AddTransient<IStreamStore>(svc => svc.GetService<MsSqlStreamStoreV3>());
-        
+            services.AddHostedService<ProjectionHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
