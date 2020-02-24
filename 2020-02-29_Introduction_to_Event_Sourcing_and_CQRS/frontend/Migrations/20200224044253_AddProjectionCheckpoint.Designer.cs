@@ -10,8 +10,8 @@ using frontend.Data;
 namespace frontend.Migrations
 {
     [DbContext(typeof(BankAccountsContext))]
-    [Migration("20190210223426_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200224044253_AddProjectionCheckpoint")]
+    partial class AddProjectionCheckpoint
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,9 +35,22 @@ namespace frontend.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("frontend.Data.Deposit", b =>
+            modelBuilder.Entity("frontend.Data.Checkpoint", b =>
                 {
-                    b.Property<Guid>("DepositId")
+                    b.Property<string>("ProjectionName")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(200);
+
+                    b.Property<long>("LastCheckpoint");
+
+                    b.HasKey("ProjectionName");
+
+                    b.ToTable("Checkpoints");
+                });
+
+            modelBuilder.Entity("frontend.Data.TransactionsView", b =>
+                {
+                    b.Property<Guid>("TransactionId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("AccountId");
@@ -46,45 +59,11 @@ namespace frontend.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.HasKey("DepositId");
+                    b.Property<string>("Type");
 
-                    b.HasIndex("AccountId");
+                    b.HasKey("TransactionId");
 
-                    b.ToTable("Deposits");
-                });
-
-            modelBuilder.Entity("frontend.Data.Withdrawal", b =>
-                {
-                    b.Property<Guid>("WithdrawalId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("AccountId");
-
-                    b.Property<decimal>("Amount");
-
-                    b.Property<DateTime>("Date");
-
-                    b.HasKey("WithdrawalId");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Withdrawals");
-                });
-
-            modelBuilder.Entity("frontend.Data.Deposit", b =>
-                {
-                    b.HasOne("frontend.Data.Account", "Account")
-                        .WithMany("Deposits")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("frontend.Data.Withdrawal", b =>
-                {
-                    b.HasOne("frontend.Data.Account", "Account")
-                        .WithMany("Withdrawals")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618
         }

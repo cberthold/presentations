@@ -27,8 +27,7 @@ namespace frontend.Data
     public interface IBankAccountsContext : IDbContext
     {
         DbSet<Account> Accounts { get; set; }
-        DbSet<Deposit> Deposits { get; set; }
-        DbSet<Withdrawal> Withdrawals { get; set; }
+        DbSet<Checkpoint> Checkpoints { get; set; }
         DbSet<TransactionsView> Transactions { get; set; }
     }
 
@@ -44,11 +43,20 @@ namespace frontend.Data
         }
 
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<Deposit> Deposits { get; set; }
-        public DbSet<Withdrawal> Withdrawals { get; set; }
 
+        public DbSet<Checkpoint> Checkpoints { get; set; }
+        
         public DbSet<TransactionsView> Transactions { get; set; }
 
+    }
+
+    public class Checkpoint
+    {
+        [MaxLength(200)]
+        [Key]
+        public string ProjectionName { get; set; }
+
+        public long LastCheckpoint { get; set; }
     }
 
     public class TransactionsView
@@ -73,8 +81,6 @@ namespace frontend.Data
         public string AccountName { get; set; }
         public decimal CurrentBalance { get; set; }
 
-        public List<Deposit> Deposits { get; set; }
-        public List<Withdrawal> Withdrawals { get; set; }
     }
 
     public class Deposit
