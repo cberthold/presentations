@@ -1,8 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 
-const accountNumber = "4ff8fae5-e2fe-4d65-9f59-cf95cb5f31ea";
-
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
@@ -16,6 +14,7 @@ export interface DepositState {
 
 interface SubmitDepositAction {
     type: 'SUBMIT_DEPOSIT';
+    accountId: string;
     depositAmount: number;
 }
 
@@ -32,7 +31,7 @@ type KnownAction = SubmitDepositAction | SubmitDepositSuccessAction;
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    submitDeposit: (depositAmount: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+    submitDeposit: (accountId: string, depositAmount: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
 
@@ -47,7 +46,7 @@ export const actionCreators = {
             amount: parsedDepositAmount,
         };
 
-        const url = `api/Account/${accountNumber}/Deposit`;
+        const url = `api/Account/${accountId}/Deposit`;
         
         const response = await fetch(url, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.

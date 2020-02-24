@@ -1,5 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
+import { appendFileSync } from 'fs';
 
 
 // -----------------
@@ -8,6 +9,7 @@ import { AppThunkAction } from '.';
 export interface AccountState {
     isLoading: boolean;
     accounts: AccountModel[];
+    selectedAccountId?: string | undefined;
 }
 
 export interface AccountModel {
@@ -45,19 +47,28 @@ interface GetAccountsSuccessAction {
     accounts: AccountModel[];
 }
 
+interface SelectAccountAction {
+    type: 'SELECT_ACCOUNT';
+    accountId: string;
+}
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 type KnownAction = 
     SubmitOpenNewAccountAction | 
     SubmitOpenNewAccountSuccessAction |
     GetAccountsAction |
-    GetAccountsSuccessAction;
+    GetAccountsSuccessAction |
+    SelectAccountAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
+    selectAccount: (accountId: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        dispatch({ type: 'SELECT_ACCOUNT', accountId });
+    },
     getAccounts: (refresh: boolean): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
@@ -162,7 +173,7 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: AccountState = { isLoading: false, accounts: [] };
+const unloadedState: AccountState = { isLoading: false, accounts: [], selectedAccountId: undefined };
 
 export const reducer: Reducer<AccountState> = (state: AccountState | undefined, incomingAction: Action): AccountState => {
     if (state === undefined) {
@@ -184,9 +195,20 @@ export const reducer: Reducer<AccountState> = (state: AccountState | undefined, 
                 isLoading: false,
             };
         case 'GET_ACCOUNTS_SUCCESS':
+            let selectedAccountId = state.selectedAccountId;
+            if(!selectedAccountId && action.accounts && action.accounts.length > 0)
+            {
+                selectedAccountId = action.accounts[0].accountId;
+            }
             return {
                 ...state,
                 accounts: action.accounts,
+                selectedAccountId: selectedAccountId,
+            };
+        case 'SELECT_ACCOUNT':
+            return {
+                ...state,
+                selectedAccountId: action.accountId,
             };
         default:
             return state;

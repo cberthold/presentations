@@ -1,8 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 
-const accountNumber = "4ff8fae5-e2fe-4d65-9f59-cf95cb5f31ea";
-
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
@@ -49,7 +47,7 @@ type KnownAction =
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestBankTransactions: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+    requestBankTransactions: (accountId: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
 
@@ -60,7 +58,7 @@ export const actionCreators = {
 
         dispatch({ type: 'REQUEST_BANK_TRANSACTIONS' });
 
-        const url = `api/Account/${accountNumber}/Transactions`;
+        const url = `api/Account/${accountId}/Transactions`;
 
         try
         {

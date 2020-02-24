@@ -3,13 +3,22 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as BankTransactionsStore from '../store/BankTransactions';
+import * as AccountsStore from '../store/Accounts';
+import { Dispatch, bindActionCreators } from 'redux';
+import { AccountSelector } from './AccountSelector';
 
-// At runtime, Redux will merge together...
+
+interface IBankTransactionProps
+{
+  transaction: BankTransactionsStore.BankTransactionsState;
+  account: AccountsStore.AccountState;
+  transactionActions: typeof BankTransactionsStore.actionCreators,
+  accountActions: typeof AccountsStore.actionCreators,
+}
+
 type BankTransactionProps =
-  BankTransactionsStore.BankTransactionsState // ... state we've requested from the Redux store
-  & typeof BankTransactionsStore.actionCreators // ... plus action creators we've requested
+  IBankTransactionProps
   & RouteComponentProps<{ /*startDateIndex: string*/ }>; // ... plus incoming routing parameters
-
 
 class BankTransactions extends React.PureComponent<BankTransactionProps> {
   // This method is called when the component is first added to the document
@@ -17,26 +26,40 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
     this.ensureDataFetched();
   }
 
+  private requestTransactions()
+  {
+    if(this.props.account.selectedAccountId)
+    {
+      this.props.transactionActions.requestBankTransactions(this.props.account.selectedAccountId);
+    }
+  }
 
   public render() {
+
+    const { accounts, selectedAccountId } = this.props.account;
+    const { selectAccount } = this.props.accountActions;
+    const { isLoading, currentBalance, transactions } = this.props.transaction;
     return (
       <React.Fragment>
         <div>
           <h1>Current Transactions</h1>
-          <button disabled={this.props.isLoading} onClick={this.props.requestBankTransactions}>Refresh</button>
+          <p>Account: <AccountSelector accounts={accounts} onChange={selectAccount} value={selectedAccountId} /></p>
+    
+          <button disabled={isLoading} onClick={() => this.requestTransactions()}>Refresh</button>
 
-          <h2>Current Balance: {this.props.currentBalance}</h2>
-          {this.renderTransactionsTable()}
+          <h2>Current Balance: {currentBalance}</h2>
+          {this.renderTransactionsTable(transactions)}
         </div>
       </React.Fragment>
     );
   }
 
   private ensureDataFetched() {
-    this.props.requestBankTransactions();
+    this.props.accountActions.getAccounts(true);
+    this.requestTransactions();
   }
 
-  private renderTransactionsTable() {
+  private renderTransactionsTable(transactions: BankTransactionsStore.BankTransaction[]) {
     return (
       <table className='table'>
         <thead>
@@ -48,7 +71,7 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
           </tr>
         </thead>
         <tbody>
-          {this.renderMapTransactions(this.props.transactions)}
+          {this.renderMapTransactions(transactions)}
         </tbody>
       </table>
     );
@@ -70,7 +93,23 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
   
 }
 
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  ({
+    transactionActions: bindActionCreators(BankTransactionsStore.actionCreators, dispatch),
+    accountActions: bindActionCreators(AccountsStore.actionCreators, dispatch),
+  });
+
 export default connect(
-  (state: ApplicationState) => state.bankTransactions, // Selects which state properties are merged into the component's props
-  BankTransactionsStore.actionCreators // Selects which action creators are merged into the component's props
+  (state: ApplicationState) => {
+    const returnState = {
+      transaction : state.bankTransactions,
+      account : state.account,
+    }
+    return returnState;
+  },// Selects which state properties are merged into the component's props
+  (dispatch: Dispatch) => {
+    const returnProps = mapDispatchToProps(dispatch);
+    return returnProps;
+  }
 )(BankTransactions as any);

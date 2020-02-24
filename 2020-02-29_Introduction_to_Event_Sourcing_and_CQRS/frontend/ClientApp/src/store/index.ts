@@ -18,7 +18,7 @@ export const reducers = {
     bankTransactions: BankTransactions.reducer,
     deposit: Deposit.reducer,
     withdrawal: Withdrawal.reducer,
-    openNewAccount: Accounts.reducer,
+    account: Accounts.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
