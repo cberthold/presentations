@@ -36,7 +36,7 @@ AS
 
 GO");
 
-            migrationBuilder.Sql("INSERT INTO Accounts (AccountId, AccountName, CurrentBalance) VALUES ('4ff8fae5-e2fe-4d65-9f59-cf95cb5f31ea','Chris Berthold', 0)");
+            //migrationBuilder.Sql("INSERT INTO Accounts (AccountId, AccountName, CurrentBalance) VALUES ('4ff8fae5-e2fe-4d65-9f59-cf95cb5f31ea','Chris Berthold', 0)");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
