@@ -7,6 +7,8 @@ using LiquidProjections;
 using SqlStreamStore;
 using SqlStreamStore.Streams;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Projections
 {
@@ -67,11 +69,42 @@ namespace Logic.Projections
         private int contextCounter = 0;
         private IServiceScope childScope = null;
 
-
-
-        public Task StartProjection(CancellationToken cancellationToken)
+        private string GetProjectionName()
         {
-            subscription = this.store.SubscribeToAll(null, StreamMessageReceived);
+            var projectionName = nameof(TransactionViewProjection);
+            return projectionName;
+        }
+
+        private async Task<long?> GetLastPosition(CancellationToken cancellationToken)
+        {
+
+            var lastPosition = default(long?);
+            using(var scope = provider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<BankAccountsContext>();
+                var projectionName = GetProjectionName();
+                var checkpointQuery = context.Checkpoints.Where(a => a.ProjectionName == projectionName).Select(a => (long?)a.LastCheckpoint);
+                lastPosition = await checkpointQuery.FirstOrDefaultAsync(cancellationToken);
+
+                if(lastPosition == null)
+                {
+                    context.Checkpoints.Add(new Checkpoint
+                    {
+                        ProjectionName = GetProjectionName(),
+                        LastCheckpoint = 0,
+                    });
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            return lastPosition;
+        }
+
+        public async Task StartProjection(CancellationToken cancellationToken)
+        {
+
+            var lastPosition = await GetLastPosition(cancellationToken);
+            subscription = this.store.SubscribeToAll(lastPosition, StreamMessageReceived);
 
             cancellationToken.Register(() => {
                 try 
@@ -84,7 +117,6 @@ namespace Logic.Projections
                 }
             });
             
-            return Task.CompletedTask;
         }
 
         private async Task StreamMessageReceived(IAllStreamSubscription subscription, StreamMessage streamMessage, CancellationToken cancellationToken)
@@ -101,7 +133,14 @@ namespace Logic.Projections
 
             childScope = childScope ?? provider.CreateScope();
             var context = childScope.ServiceProvider.GetService<BankAccountsContext>();
-            await map.Handle(streamEvent, context);
+            using(var tx = await context.Database.BeginTransactionAsync()) 
+            {
+                const string UPDATE_SQL = "UPDATE Checkpoints SET LastCheckpoint = @p0 WHERE ProjectionName = @p1";
+                await map.Handle(streamEvent, context);
+                await context.Database.ExecuteSqlCommandAsync(UPDATE_SQL, streamMessage.Position, GetProjectionName());
+                tx.Commit();
+            }
+            
         }
     }
 
