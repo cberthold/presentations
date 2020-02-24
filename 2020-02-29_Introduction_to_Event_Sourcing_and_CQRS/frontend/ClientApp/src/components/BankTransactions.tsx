@@ -34,16 +34,21 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
     }
   }
 
+  private selectAccountAndRefresh = async (accountId:string) => {
+    const { selectAccount } = this.props.accountActions;
+    await selectAccount(accountId);
+    this.requestTransactions();
+  }
+
   public render() {
 
     const { accounts, selectedAccountId } = this.props.account;
-    const { selectAccount } = this.props.accountActions;
     const { isLoading, currentBalance, transactions } = this.props.transaction;
     return (
       <React.Fragment>
         <div>
           <h1>Current Transactions</h1>
-          <p>Account: <AccountSelector accounts={accounts} onChange={selectAccount} value={selectedAccountId} /></p>
+          <p>Account: <AccountSelector accounts={accounts} onChange={(accountId) => this.selectAccountAndRefresh(accountId)} value={selectedAccountId} /></p>
     
           <button disabled={isLoading} onClick={() => this.requestTransactions()}>Refresh</button>
 

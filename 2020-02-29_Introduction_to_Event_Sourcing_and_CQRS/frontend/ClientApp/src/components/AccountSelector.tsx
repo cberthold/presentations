@@ -29,9 +29,10 @@ export class AccountSelector extends React.PureComponent<AccountSelectorProps, {
   public render() {
     const { accounts, value} = this.props;
     let accountsArray = accounts || [];
-    return (<select onChange={this.selectionChanged} value={value}>
+    let accountsValue = value;
+    return (<select onChange={(e) => this.selectionChanged(e)} value={accountsValue}>
         {accountsArray.map((account: AccountModel) =>
-            <option key={account.accountId}>{account.accountName}</option>
+            <option key={account.accountId} value={account.accountId}>{account.accountName}</option>
           )}
     </select>);
   }
