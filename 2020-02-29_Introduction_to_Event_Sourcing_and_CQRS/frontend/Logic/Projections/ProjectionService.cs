@@ -57,6 +57,8 @@ namespace Logic.Projections
                     tx.Commit();
                 }
             }
+
+            await RestartProjections(cancellationToken);
         }
 
         private async Task RestartProjections(CancellationToken cancellationToken)
