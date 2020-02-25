@@ -9,5 +9,6 @@ namespace Logic.Projections
         void SetStopToken(CancellationToken stopToken);
         Task StartProjections();
         void StopProjections();
+        Task ReplayProjections(CancellationToken cancellationToken);
     }
 } 

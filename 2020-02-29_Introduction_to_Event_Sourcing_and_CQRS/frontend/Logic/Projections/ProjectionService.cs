@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using SqlStreamStore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using frontend.Data;
 
 namespace Logic.Projections
 {
@@ -33,6 +35,28 @@ namespace Logic.Projections
         {
             DisposeProjections();
             DisposeStore();
+        }
+
+        public async Task ReplayProjections(CancellationToken cancellationToken)
+        {
+            StopProjections();
+
+            using(var childScope = provider.CreateScope())
+            {
+                var childProvider = childScope.ServiceProvider;
+                var context = childProvider.GetService<BankAccountsContext>();
+                var data = context.Database;
+                using(var tx = await data.BeginTransactionAsync())
+                {
+                    const string TRUNCATE_CHECKPOINTS = "TRUNCATE TABLE [dbo].[Checkpoints]";
+                    const string TRUNCATE_ACCOUNTS = "TRUNCATE TABLE [dbo].[Accounts]";
+                    const string TRUNCATE_TRANSACTIONS = "TRUNCATE TABLE [dbo].[Transactions]";
+                    await data.ExecuteSqlCommandAsync(TRUNCATE_CHECKPOINTS, cancellationToken);
+                    await data.ExecuteSqlCommandAsync(TRUNCATE_ACCOUNTS, cancellationToken);
+                    await data.ExecuteSqlCommandAsync(TRUNCATE_TRANSACTIONS, cancellationToken);
+                    tx.Commit();
+                }
+            }
         }
 
         private async Task RestartProjections(CancellationToken cancellationToken)
