@@ -32,6 +32,13 @@ interface RequestBankTransactionsSuccessAction {
     currentBalance: number;
 }
 
+interface RequestReplayBankTransactionsAction {
+    type: 'REQUEST_REPLAY_BANK_TRANSACTIONS';
+}
+
+interface RequestReplayBankTransactionsSuccessAction {
+    type: 'REPLAY_BANK_TRANSACTIONS_SUCCESS';
+}
 interface RequestBankTransactionsErrorAction {
     type: 'BANK_TRANSACTIONS_ERROR';
 }
@@ -40,13 +47,49 @@ interface RequestBankTransactionsErrorAction {
 type KnownAction = 
     RequestBankTransactionsAction | 
     RequestBankTransactionsSuccessAction | 
-    RequestBankTransactionsErrorAction;
+    RequestBankTransactionsErrorAction |
+    RequestReplayBankTransactionsAction |
+    RequestReplayBankTransactionsSuccessAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
+    replayTransactions: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        // Only load data if it's something we don't already have (and are not already loading)
+        const appState = getState();
+
+        if (appState && appState.bankTransactions && appState.bankTransactions.isLoading) {
+            // Don't issue a duplicate request (we already have or are loading the requested data)
+            return;
+        }
+
+        dispatch({ type: 'REQUEST_REPLAY_BANK_TRANSACTIONS' });
+
+        const url = `api/Account/ReplayAllEvents`;
+
+        try
+        {
+            const response = await fetch(url, {
+                method: "GET", // *GET, POST, PUT, DELETE, etc.
+                mode: "cors", // no-cors, cors, *same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, *same-origin, omit
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+
+            dispatch({ type: 'REPLAY_BANK_TRANSACTIONS_SUCCESS' });
+        } 
+        catch(err)
+        {
+            console.log(err);
+        }
+        
+    },
     requestBankTransactions: (accountId: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();

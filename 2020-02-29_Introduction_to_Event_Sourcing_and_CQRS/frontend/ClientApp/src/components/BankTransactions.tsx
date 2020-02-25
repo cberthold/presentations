@@ -34,6 +34,11 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
     }
   }
 
+  private replayTransactions()
+  {
+    this.props.transactionActions.replayTransactions();
+  }
+
   private selectAccountAndRefresh = async (accountId:string) => {
     const { selectAccount } = this.props.accountActions;
     await selectAccount(accountId);
@@ -51,6 +56,8 @@ class BankTransactions extends React.PureComponent<BankTransactionProps> {
           <p>Account: <AccountSelector accounts={accounts} onChange={(accountId) => this.selectAccountAndRefresh(accountId)} value={selectedAccountId} /></p>
     
           <button disabled={isLoading} onClick={() => this.requestTransactions()}>Refresh</button>
+
+          <button disabled={isLoading} onClick={() => this.replayTransactions()}>Replay</button>
 
           <h2>Current Balance: {currentBalance}</h2>
           {this.renderTransactionsTable(transactions)}
