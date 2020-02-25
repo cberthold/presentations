@@ -10,23 +10,17 @@ namespace Infrastructure
 {
     public class ProjectionHostedService : BackgroundService
     {
-        private readonly IStreamStore store;
-        private readonly IServiceProvider provider;
-        private readonly TransactionViewProjection transactionView;
-        private readonly AccountProjection account;
+        private readonly IProjectionService service;
 
-        public ProjectionHostedService(IStreamStore store, IServiceProvider provider)
+        public ProjectionHostedService(IProjectionService service)
         {
-            this.store = store;
-            this.provider = provider;
-            transactionView = new TransactionViewProjection(store, provider);
-            account = new AccountProjection(store, provider);
+            this.service = service;
         }
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await transactionView.StartProjection(stoppingToken);
-            await account.StartProjection(stoppingToken);
+            service.SetStopToken(stoppingToken);
+            await service.StartProjections();
         }
     }
 }

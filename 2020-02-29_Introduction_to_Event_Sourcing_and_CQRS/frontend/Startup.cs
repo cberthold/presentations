@@ -11,6 +11,7 @@ using CQRSlite.Domain;
 using CQRSlite.Events;
 using Infrastructure;
 using SqlStreamStore;
+using Logic.Projections;
 
 namespace frontend
 {
@@ -63,6 +64,7 @@ namespace frontend
             services.AddTransient<MsSqlStreamStoreV3>();
             services.AddTransient<IStreamStore>(svc => svc.GetService<MsSqlStreamStoreV3>());
             services.AddHostedService<ProjectionHostedService>();
+            services.AddSingleton<IProjectionService, ProjectionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

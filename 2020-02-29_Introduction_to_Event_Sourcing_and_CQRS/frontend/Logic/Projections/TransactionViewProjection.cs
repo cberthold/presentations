@@ -12,24 +12,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Projections
 {
-    public class TransactionViewProjection
+    public class TransactionViewProjection : AbstractProjectionBase<BankAccountsContext>
     {
-        private readonly IStreamStore store;
-        private readonly IServiceProvider provider;
-        private readonly IEventMap<BankAccountsContext> map;
-        private IAllStreamSubscription subscription;
-
-        public TransactionViewProjection(IStreamStore store, IServiceProvider provider)
+        public TransactionViewProjection(IStreamStore store, IServiceProvider provider) 
+            : base(store, provider)
         {
-            this.store = store;
-            this.provider = provider;
-            map = BuildMap();
         }
 
-        private static IEventMap<BankAccountsContext> BuildMap()
+        protected override void BuildEventMap(EventMapBuilder<BankAccountsContext> builder)
         {
-            var builder = new EventMapBuilder<BankAccountsContext>();
-            
             builder.Map<AmountDepositedEvent>()
                 .As(async (e, ctx) => {
                     var transaction = new TransactionsView
@@ -59,88 +50,12 @@ namespace Logic.Projections
                     await ctx.Transactions.AddAsync(transaction);
                     await ctx.SaveChangesAsync();
                 });
-
-            return builder.Build(new ProjectorMap<BankAccountsContext>
-            {
-                Custom = (ctx, projector) => projector()
-            });
         }
 
-        private int contextCounter = 0;
-        private IServiceScope childScope = null;
-
-        private string GetProjectionName()
+        protected override string GetProjectionName()
         {
             var projectionName = nameof(TransactionViewProjection);
             return projectionName;
-        }
-
-        private async Task<long?> GetLastPosition(CancellationToken cancellationToken)
-        {
-
-            var lastPosition = default(long?);
-            using(var scope = provider.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetService<BankAccountsContext>();
-                var projectionName = GetProjectionName();
-                var checkpointQuery = context.Checkpoints.Where(a => a.ProjectionName == projectionName).Select(a => (long?)a.LastCheckpoint);
-                lastPosition = await checkpointQuery.FirstOrDefaultAsync(cancellationToken);
-
-                if(lastPosition == null)
-                {
-                    context.Checkpoints.Add(new Checkpoint
-                    {
-                        ProjectionName = GetProjectionName(),
-                        LastCheckpoint = 0,
-                    });
-                    await context.SaveChangesAsync();
-                }
-            }
-
-            return lastPosition;
-        }
-
-        public async Task StartProjection(CancellationToken cancellationToken)
-        {
-
-            var lastPosition = await GetLastPosition(cancellationToken);
-            subscription = this.store.SubscribeToAll(lastPosition, StreamMessageReceived);
-
-            cancellationToken.Register(() => {
-                try 
-                {
-                    subscription?.Dispose();
-                }
-                finally
-                {
-                    subscription = null;
-                }
-            });
-            
-        }
-
-        private async Task StreamMessageReceived(IAllStreamSubscription subscription, StreamMessage streamMessage, CancellationToken cancellationToken)
-        {
-            var streamEvent = await streamMessage.RehydrateEventObject(cancellationToken);
-
-            if(contextCounter % 50 == 0)
-            {
-                childScope?.Dispose();
-                childScope = null;
-            }
-
-            contextCounter++;
-
-            childScope = childScope ?? provider.CreateScope();
-            var context = childScope.ServiceProvider.GetService<BankAccountsContext>();
-            using(var tx = await context.Database.BeginTransactionAsync()) 
-            {
-                const string UPDATE_SQL = "UPDATE Checkpoints SET LastCheckpoint = @p0 WHERE ProjectionName = @p1";
-                await map.Handle(streamEvent, context);
-                await context.Database.ExecuteSqlCommandAsync(UPDATE_SQL, streamMessage.Position, GetProjectionName());
-                tx.Commit();
-            }
-            
         }
     }
 
