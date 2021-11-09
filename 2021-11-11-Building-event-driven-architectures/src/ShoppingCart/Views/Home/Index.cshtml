@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using System.Linq;
+@model ShoppingCart.Logic.DTO.Cart
+<style>
+    .cart .itemId { text-align:right; }
+    .cart .amount { text-align:right; }
+    .cart .total { text-align:right; }
+    .cart td { padding: 10px; margin: 10px; }
+</style>
+<div class="text-center">
+    <h1 class="display-4">Cart @Model.Id.ToString("N")</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <td>Product</td>
+                <td>Amount</td>
+                <td class="Remove">&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="productName">@item.ProductName</td>
+                    <td class="amount">@item.Amount</td>
+                    <td class="itemId">@Html.ActionLink("Remove Item", "RemoveItem", new { id = item.ItemId.ToString("N") })</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="total">Total:</td>
+                <td class="amount">@Model.Sum(a=> a.Amount)</td>
+                <td>@Html.ActionLink("Place Order", "PlaceOrder")</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
