@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using System.Linq;
+@model ShoppingCart.Logic.DTO.Order
+<style>
+
+    .cart td {
+        padding: 10px;
+        margin: 10px;
+    }
+</style>
+<div class="text-center">
+    <h1 class="display-4">Order Placed @Model.DatePartitionKey-@Model.OrderRowKey</h1>
+    <table class="cart">
+
+        <tbody>
+
+            <tr>
+                <td>Order Date</td>
+                <td class="amount">@Model.OrderDate</td>
+            </tr>
+            <tr>
+                <td>Order Amount</td>
+                <td class="amount">@Model.OrderAmount</td>
+            </tr>
+            <tr>
+                <td>Order Status</td>
+                <td class="amount">@Model.Status</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
