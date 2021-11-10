@@ -20,7 +20,6 @@ namespace CreditCardProcessor
             response.TransactionId = request.TransactionId;
             await strategy.Process(request, response);
             response.TimeStamp = DateTime.UtcNow;
-            response.IsSucess = true; //always approved
             return response;
         }
     }
