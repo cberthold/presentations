@@ -38,12 +38,10 @@ namespace ShoppingCart.Logic.Services
             }
             catch
             {
-                order.Status = "Failed";
+                //order.Status = "Failed";
             }
-            finally
-            {
-                await orderClient.SaveOrder(order);
-            }
+
+            await orderClient.SaveOrder(order);
         }
     }
 }

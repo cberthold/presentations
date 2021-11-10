@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
+using ShoppingCart.Logic.DTO;
 using ShoppingCart.Logic.Payment;
 using System;
 using System.Collections.Generic;
@@ -21,15 +22,15 @@ namespace ShoppingCart.Logic.Clients
 
         private QueueClient CreateClient(IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("PaymentConnection");
+            string connectionString = configuration["PaymentConnection"];
             var queueClient = new QueueClient(connectionString, "paymentqueue-items", new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
             queueClient.CreateIfNotExists();
             return queueClient;
         }
 
-        public async Task SendAuthorization(AuthorizationRequest request)
+        public async Task Authorize(Order order)
         {
-            string messageAsJson = JsonSerializer.Serialize(request);
+            string messageAsJson = JsonSerializer.Serialize(order);
             BinaryData cloudQueueMessage = new BinaryData(messageAsJson);
             await client.SendMessageAsync(cloudQueueMessage);
         }

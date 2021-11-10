@@ -49,6 +49,7 @@ namespace ShoppingCart
                 client.BaseAddress = new Uri("http://localhost:7071/api/");
             });
 
+            services.AddTransient<AuthorizationQueueClient>();
 
             // add cart session handling
             services.AddHttpContextAccessor();
@@ -62,7 +63,7 @@ namespace ShoppingCart
             services.AddTransient<ISessionService, SessionService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IPaymentService, QueuedPaymentService>();
 
         }
 
