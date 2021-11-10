@@ -37,11 +37,11 @@ namespace ShoppingCart.Services
             return newId;
         }
 
-        private async Task<ISession> GetSession()
+        private Task<ISession> GetSession()
         {
             var session = contextAccessor.HttpContext.Session;
             //await session.LoadAsync();
-            return session;
+            return Task.FromResult(session);
         }
     }
 }

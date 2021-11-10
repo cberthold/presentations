@@ -60,6 +60,12 @@ namespace ShoppingCart.Controllers
             return View(order);
         }
 
+        public async Task<IActionResult> Reset()
+        {
+            await cartService.ResetCart();
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult Privacy()
         {
             return View();

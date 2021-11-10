@@ -13,37 +13,24 @@ namespace ShoppingCart.Logic.Services
     {
         private readonly OrderTableClient client;
         private readonly CartService cartService;
-        private readonly PaymentClient payment;
+        private readonly PaymentService paymentService;
 
-        public OrderService(OrderTableClient client, CartService cartService, PaymentClient payment)
+        public OrderService(OrderTableClient client, CartService cartService, PaymentService paymentService)
         {
             this.client = client;
             this.cartService = cartService;
-            this.payment = payment;
+            this.paymentService = paymentService;
         }
 
         public async Task<Order> PlaceOrder(Guid cartId)
         {
             var cart = await cartService.LoadCart(cartId);
             var order = cart.MapToOrder();
-            var authorization = order.MapToAuthorizationRequest();
             await client.SaveOrder(order);
-            var response = await payment.AuthorizePayment(authorization);
-
-            if(response.IsSucess)
-            {
-                order.Status = "Paid";
-            }
-            else
-            {
-                order.Status = "Declined";
-            }
-
-            await client.SaveOrder(order);
+            await paymentService.AuthorizePayment(order);
 
             return order;
         }
-
 
         public async Task<Order> GetOrder(string orderDate, string orderKey)
         {

@@ -29,9 +29,11 @@ namespace ShoppingCart.Logic.Clients
 
             if (!response.IsSuccessStatusCode)
                 throw new InvalidOperationException("Unhandled exception occurred processing credit card");
-
-            var stream = await response.Content.ReadAsStreamAsync();
-            var authResponse = await JsonSerializer.DeserializeAsync<AuthorizationResponse>(stream);
+            string content = await response.Content.ReadAsStringAsync();
+            var authResponse = JsonSerializer.Deserialize<AuthorizationResponse>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            });
 
             return authResponse;
         }

@@ -28,6 +28,11 @@ namespace ShoppingCart.Logic.Services
             return await LoadCart(cartId);
         }
 
+        public async Task ResetCart()
+        {
+            await sessionService.ResetSessionId();
+        }
+
         public async Task<Cart> LoadCart(Guid cartId)
         {
             var cart = new Cart();

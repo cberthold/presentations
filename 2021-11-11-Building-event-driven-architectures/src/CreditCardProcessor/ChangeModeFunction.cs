@@ -20,7 +20,7 @@ namespace CreditCardProcessor
         }
 
         [FunctionName("ChangeMode")]
-        public async Task<IActionResult> Run(
+        public IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
