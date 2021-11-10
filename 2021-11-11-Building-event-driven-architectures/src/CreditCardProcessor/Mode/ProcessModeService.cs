@@ -20,7 +20,7 @@ namespace CreditCardProcessor
 
         public void SetProcessMode(int mode)
         {
-            if (mode <= 0 || mode >= 3)
+            if (mode <= 0 || mode > 3)
                 throw new InvalidOperationException();
 
             var processMode = (ProcessMode)mode;
