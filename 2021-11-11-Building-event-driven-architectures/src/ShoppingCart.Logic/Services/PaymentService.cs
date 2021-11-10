@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Logic.Services
 {
-    public class PaymentService
+    public class PaymentService : IPaymentService
     {
         private readonly OrderTableClient orderClient;
         private readonly PaymentClient payment;

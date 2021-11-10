@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Logic.Services
 {
-    public class OrderService
+    public class OrderService : IOrderService
     {
         private readonly OrderTableClient client;
-        private readonly CartService cartService;
-        private readonly PaymentService paymentService;
+        private readonly ICartService cartService;
+        private readonly IPaymentService paymentService;
 
-        public OrderService(OrderTableClient client, CartService cartService, PaymentService paymentService)
+        public OrderService(OrderTableClient client, ICartService cartService, IPaymentService paymentService)
         {
             this.client = client;
             this.cartService = cartService;

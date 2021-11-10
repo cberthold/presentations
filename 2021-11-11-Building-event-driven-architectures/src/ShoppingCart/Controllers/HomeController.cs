@@ -15,10 +15,10 @@ namespace ShoppingCart.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CartService cartService;
-        private readonly OrderService orderService;
+        private readonly ICartService cartService;
+        private readonly IOrderService orderService;
 
-        public HomeController(ILogger<HomeController> logger, CartService cartService, OrderService orderService)
+        public HomeController(ILogger<HomeController> logger, ICartService cartService, IOrderService orderService)
         {
             _logger = logger;
             this.cartService = cartService;

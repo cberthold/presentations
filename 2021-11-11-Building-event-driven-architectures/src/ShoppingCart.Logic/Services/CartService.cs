@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Logic.Services
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly CartTableClient client;
         private readonly ISessionService sessionService;
@@ -48,7 +48,7 @@ namespace ShoppingCart.Logic.Services
 
             string filter = $"PartitionKey eq '{id.ToString("N")}'";
             AsyncPageable<TableEntity> entities = client.QueryAsync<TableEntity>(filter);
-            
+
             var list = await entities.Select(e => e.MapToCartItem()).ToListAsync();
             var sorted = list.OrderBy(a => a.Position);
             return sorted;
@@ -76,7 +76,7 @@ namespace ShoppingCart.Logic.Services
             item.Amount = amount;
             item.CartId = cart.Id;
             item.ItemId = Guid.NewGuid();
-            
+
             var entity = item.MapToTableEntity();
             await client.UpsertEntityAsync(entity);
 

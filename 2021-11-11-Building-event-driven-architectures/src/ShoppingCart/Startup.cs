@@ -60,9 +60,9 @@ namespace ShoppingCart
                 options.Cookie.IsEssential = true;
             });
             services.AddTransient<ISessionService, SessionService>();
-            services.AddTransient<CartService>();
-            services.AddTransient<OrderService>();
-            services.AddTransient<PaymentService>();
+            services.AddTransient<ICartService, CartService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IPaymentService, PaymentService>();
 
         }
 
