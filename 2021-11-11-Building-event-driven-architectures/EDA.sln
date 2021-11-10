@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart", "src\Shoppin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Logic", "src\ShoppingCart.Logic\ShoppingCart.Logic.csproj", "{18981E86-C51D-4C98-A375-81650920A71D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Payments", "src\ShoppingCart.Payments\ShoppingCart.Payments.csproj", "{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{18981E86-C51D-4C98-A375-81650920A71D}.Release|x64.Build.0 = Release|Any CPU
 		{18981E86-C51D-4C98-A375-81650920A71D}.Release|x86.ActiveCfg = Release|Any CPU
 		{18981E86-C51D-4C98-A375-81650920A71D}.Release|x86.Build.0 = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|x64.Build.0 = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Debug|x86.Build.0 = Debug|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|x64.ActiveCfg = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|x64.Build.0 = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0C5351D-49AF-4E6F-BD3D-A62F2F6176AE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
