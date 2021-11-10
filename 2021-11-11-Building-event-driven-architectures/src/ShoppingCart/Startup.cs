@@ -63,7 +63,7 @@ namespace ShoppingCart
             services.AddTransient<ISessionService, SessionService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<IPaymentService, QueuedPaymentService>();
+            services.AddTransient<IPaymentService, PaymentService>();
 
         }
 
