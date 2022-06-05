@@ -24,12 +24,23 @@
 2018/11/01 Thinking in Docker [URL](https://github.com/cberthold/presentations/tree/master/2018-11-01_Thinking_in_Docker)
   * Presentation on Thinking in Docker concepts and demos of possibilities and practices Docker can bring to your every day development and deployment practices
   
-2018/03/02 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS) - South Florida Code Camp 2019
+2019/03/02 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-02_Introduction_to_Event_Sourcing_and_CQRS) - South Florida Code Camp 2019
   * Presentation on introducing concepts of Event Sourcing and CQRS.
   
-2018/03/30 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-30_Introduction_to_Event_Sourcing_and_CQRS) - Orlando Code Camp 2019
+2019/03/30 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2019-03-30_Introduction_to_Event_Sourcing_and_CQRS) - Orlando Code Camp 2019
   * Presentation on introducing concepts of Event Sourcing and CQRS.  This version has been updated to truncate the comparison of CRUD to Event sourcing.  Also has added the ability of showing a replay of events.  (does not use projections for simplicity)
-  
-  
 
+2020/01/09 Building .NET Apps with Docker Compose [URL](https://github.com/cberthold/presentations/tree/master/2020-01-09_Building_dotnet_apps_with_docker_compose)
+  * Presentation on how using docker compose along with building your .NET application can help you to build applications that run similarly in the cloud.  
   
+2020/02/13 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2020-02-13_Introduction_to_Event_Sourcing_and_CQRS)
+  * Presentation on introducing concepts of Event Sourcing and CQRS.  This version has been updated to truncate the comparison of CRUD to Event sourcing.  Also has added the ability of showing a replay of events.  (does not use projections for simplicity) 
+
+2020/02/29 Introduction to Event Sourcing and CQRS [URL](https://github.com/cberthold/presentations/tree/master/2020-02-29_Introduction_to_Event_Sourcing_and_CQRS)
+  * Presentation on introducing concepts of Event Sourcing and CQRS.  This version has been updated to truncate the comparison of CRUD to Event sourcing.  Also has added the ability of showing a replay of events.  (does not use projections for simplicity) 
+
+2021/11/11 Building event driven architectures [URL](https://github.com/cberthold/presentations/tree/master/2021-11-11-Building-event-driven-architectures)
+  * Presentation on building event driven architectures and focuses on using the Online Shopping domain as an example to show how event-driven architectures can bring performance, scalability and reliability to online systems
+  
+2022/06/09 Skills Intersection - High-Performance Developers [URL](https://github.com/cberthold/presentations/tree/master/2022-06-09-Skills-Intersection-High-Performance-Dev)
+  * Presentation about the many skills that a developer needs in order to perform well. It can feel overwhelming. We'll take a look at some of those skills, how they intersect with each other, and talk about tips to help you get started improving those skills.
