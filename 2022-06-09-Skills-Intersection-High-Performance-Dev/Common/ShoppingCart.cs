@@ -45,7 +45,7 @@ namespace ConsoleApp1
                     },
                     new ShoppingItem
                     {
-                        Description = "Product A",
+                        Description = "Product B",
                         Quantity = 4,
                         Price = 2.50m,
                         ItemTotal = 10.00m
