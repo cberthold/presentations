@@ -58,9 +58,27 @@ namespace InterfacesAndClasses
             var dog = new Dog();
             var shark = new Shark();
 
+            Console.WriteLine("---- Interface Is-A -----");
             MakeThemRunSwimAndOrTalk(person);
             MakeThemRunSwimAndOrTalk(dog);
             MakeThemRunSwimAndOrTalk(shark);
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+            // example of swapping interfaces at runtime
+
+            Console.WriteLine("---- Swapping Implementations At Runtime -----");
+            ISwim iswim = person;
+            iswim.Swim();
+            
+            iswim = dog;
+            iswim.Swim();
+
+            iswim = shark;
+            iswim.Swim();
         }
 
         private static void MakeThemRunSwimAndOrTalk(object o)
