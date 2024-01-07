@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Diagnostics;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 
@@ -13,11 +14,11 @@ while(true)
         break;
     }
 
-
+    Stopwatch sw = Stopwatch.StartNew();
     Console.WriteLine("Executing Say Hello!");
 
     var client = new HttpClient();
-    client.BaseAddress = new Uri("http://localhost:7029/api/");
+    client.BaseAddress = new Uri("http://localhost:7087/api/");
 
     // execute SayHelloOrchestration_HttpStart
     var response = await client.GetAsync("SayHelloOrchestration_HttpStart");
@@ -52,17 +53,21 @@ while(true)
             string instanceId = result.instanceId;
             string runtimeStatus = result.runtimeStatus;
 
-            if(response.StatusCode == System.Net.HttpStatusCode.OK && completedStates.Contains(runtimeStatus))
+            if (response.StatusCode == System.Net.HttpStatusCode.OK && completedStates.Contains(runtimeStatus))
             {
                 var output = result.output;
                 Console.WriteLine($"Orchestration: {name} with instanceId: {instanceId} completed with status: {runtimeStatus}");
                 Console.WriteLine($"Output: {output}");
+                sw.Stop();
+                Console.WriteLine($"Took {sw.ElapsedMilliseconds} milliseconds");
+
                 break;
             }
             else
             {
                 Console.WriteLine($"Orchestration: {name} with instanceId: {instanceId} is: {runtimeStatus}");
             }
+
 
         }
     }
