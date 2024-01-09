@@ -1,0 +1,94 @@
+﻿@page "/pizza-orders-store"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<PageTitle>Pizza Orders</PageTitle>
+
+@using BlazorApp.Demo3.Store.Data
+@using global::Shared.Demo3
+@inject PizzaOrderService OrderService
+
+<h1>Pizza Orders</h1>
+
+@if (requests == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Instance Id</th>
+                <th>Veggies</th>
+                <th>Meats</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in requests)
+            {
+                <tr>
+                    <td>@order.Order.OrderNumber</td>
+                    <td>@order.InstanceId</td>
+                    <td>@string.Join(';', order.Order.Veggies.Select(a => a.ToString()).ToArray())</td>
+                    <td>@string.Join(';', order.Order.Meats.Select(a => a.ToString()).ToArray())</td>
+                    <td>
+                        @if (order == current)
+                        {
+                            <button @onclick="PizzaMadeClicked">
+                                Pizza Made
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private PizzaOrderRequest[]? requests;
+    private PizzaOrderRequest? current;
+    private HubConnection? hubConnection;
+    private List<string> messages = new List<string>();
+    private string? userInput;
+    private string? messageInput;
+
+    protected override async Task OnInitializedAsync()
+    {
+        requests = OrderService.GetOrders();
+        current = requests.FirstOrDefault();
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/ordershub"))
+            .Build();
+
+        hubConnection.On("UpdateOrders", () =>
+        {
+            requests = OrderService.GetOrders();
+            current = requests.FirstOrDefault();
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task PizzaMadeClicked()
+    {
+        await OrderService.CompleteOrder(current.Order.OrderNumber);
+    }
+
+    public bool IsConnected =>
+        hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
